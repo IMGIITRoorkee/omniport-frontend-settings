@@ -1,0 +1,7 @@
+.nav-container{
+    display: flex;
+    justify-content: center;
+}
+.nav-menu{
+    width: 100% !important;
+}

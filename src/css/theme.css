@@ -1,0 +1,10 @@
+.theme-wrapper{
+
+}
+.theme-card{
+    height: 8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
