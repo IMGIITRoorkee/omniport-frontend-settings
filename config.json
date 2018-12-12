@@ -1,0 +1,8 @@
+{
+  "nomenclature": {
+    "name": "settings",
+    "verboseName": "Settings"
+  },
+  "baseUrl": "/settings",
+  "source": "settings/src/index"
+}
