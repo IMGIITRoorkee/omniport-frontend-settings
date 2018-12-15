@@ -1,0 +1,15 @@
+.session-wrapper{
+    display: flex;
+}
+.session-item-container{
+    display: flex;
+    align-items: center;
+    margin-right: 0.5em;
+}
+.session-description-container{
+    flex-grow: 1;
+}
+.session-button-container{
+    display: flex;
+    align-items: center;
+}
