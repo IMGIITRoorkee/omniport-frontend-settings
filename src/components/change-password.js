@@ -1,14 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { isBrowser } from 'react-device-detect'
-import { Form, Grid, Segment, Button, Message } from 'semantic-ui-react'
+import { Form, Grid, Segment, Button, Message, Header } from 'semantic-ui-react'
 
+import { getTheme } from 'formula_one'
+import PasswordField from '../components/form-fields/password-field'
 import { initialiseChangePassword, submitChangePassword } from '../actions'
 
 import '../css/change-password.css'
-import { getTheme } from 'formula_one'
 
-class ChangePassword extends React.PureComponent {
+class ChangePassword extends React.Component {
   state = {
     old_password: '',
     new_password: '',
@@ -23,9 +24,7 @@ class ChangePassword extends React.PureComponent {
     this.props.InitialiseChangePassword()
   }
 
-  handleInputChange = e => {
-    const name = e.target.name
-    const value = e.target.value
+  handleInputChange = (e, { name, value }) => {
     this.setState({
       [name]: value
     })
@@ -36,10 +35,14 @@ class ChangePassword extends React.PureComponent {
         old_password: this.state.old_password,
         new_password: this.state.new_password
       }
+      this.setState({
+        old_password: '',
+        new_password: '',
+        confirm_password: ''
+      })
       this.props.SubmitChangePassword(data)
     } else {
       this.setState({
-        old_password: '',
         new_password: '',
         confirm_password: '',
         message: {
@@ -54,7 +57,10 @@ class ChangePassword extends React.PureComponent {
     const { changePassword } = this.props
     return (
       <div styleName='change-password-wrapper'>
-        <Segment compact color={getTheme()}>
+        <Segment color={getTheme()} attached='top'>
+          <Header as='h3'>Change password</Header>
+        </Segment>
+        <Segment attached='bottom'>
           {this.state.message.active && (
             <Grid>
               <Grid.Column width={isBrowser ? 10 : 16}>
@@ -88,63 +94,25 @@ class ChangePassword extends React.PureComponent {
           )}
           <Form>
             <Grid stackable>
-              <Grid.Row as={Form.Field}>
-                <Grid.Column
-                  width={4}
-                  as='label'
-                  htmlFor='old_password'
-                  verticalAlign='middle'
-                >
-                  Current password
-                </Grid.Column>
-                <Grid.Column width={6}>
-                  <Form.Input
-                    value={this.state.old_password}
-                    onChange={this.handleInputChange}
-                    type='password'
-                    name='old_password'
-                    id='old_password'
-                  />
-                </Grid.Column>
-              </Grid.Row>
-              <Grid.Row as={Form.Field}>
-                <Grid.Column
-                  width={4}
-                  as='label'
-                  htmlFor='new_password'
-                  verticalAlign='middle'
-                >
-                  New password
-                </Grid.Column>
-                <Grid.Column width={6}>
-                  <Form.Input
-                    value={this.state.new_password}
-                    onChange={this.handleInputChange}
-                    type='password'
-                    name='new_password'
-                    id='new_password'
-                  />
-                </Grid.Column>
-              </Grid.Row>
-              <Grid.Row as={Form.Field}>
-                <Grid.Column
-                  width={4}
-                  as='label'
-                  htmlFor='confirm_password'
-                  verticalAlign='middle'
-                >
-                  Confirm password
-                </Grid.Column>
-                <Grid.Column width={6}>
-                  <Form.Input
-                    value={this.state.confirm_password}
-                    onChange={this.handleInputChange}
-                    type='password'
-                    name='confirm_password'
-                    id='confirm_password'
-                  />
-                </Grid.Column>
-              </Grid.Row>
+              <PasswordField
+                name='old_password'
+                verboseName='Current Password'
+                handleChange={this.handleInputChange}
+                value={this.state.old_password}
+              />
+              <PasswordField
+                name='new_password'
+                verboseName='New Password'
+                handleChange={this.handleInputChange}
+                value={this.state.new_password}
+              />
+              <PasswordField
+                name='new_password'
+                verboseName='New Password'
+                handleChange={this.handleInputChange}
+                value={this.state.new_password}
+              />
+
               <Grid.Row as={Form.Field}>
                 <Grid.Column width={4} verticalAlign='middle'>
                   <Button color={getTheme()} onClick={this.handleSubmit}>
@@ -160,7 +128,7 @@ class ChangePassword extends React.PureComponent {
   }
 }
 
-function mapStateToProps (state) {
+const mapStateToProps = state => {
   return {
     changePassword: state.changePassword
   }
