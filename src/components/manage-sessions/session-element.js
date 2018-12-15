@@ -82,9 +82,7 @@ class SessionElement extends React.PureComponent {
         )}
         <div styleName='session-description-container'>
           <OneLineDescription
-            desc={`${moment(data.datetimeCreated).format(
-              'h:mm a, MMMM Do, YYYY'
-            )}`}
+            desc={`Last seen ${moment(data.datetimeModified).fromNow()}`}
             icon='time'
           />
           <OneLineDescription
@@ -102,7 +100,14 @@ class SessionElement extends React.PureComponent {
             icon={this.renderOS().icon}
           />
           <OneLineDescription
-            desc={data.location}
+            desc={
+              <Popup
+                trigger={<span>{data.location}</span>}
+                content={data.ipAddress}
+                position='left center'
+                inverted
+              />
+            }
             icon='map marker alternate'
           />
         </div>
