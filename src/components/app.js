@@ -1,10 +1,9 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import { isBrowser, isMobile } from 'react-device-detect'
 import { Scrollbars } from 'react-custom-scrollbars'
 import { Route } from 'react-router-dom'
 
-import { Container, Rail, Segment, Grid } from 'semantic-ui-react'
+import { Container, Grid } from 'semantic-ui-react'
 import Sidebar from 'core/common/src/components/primary-sidebar'
 import { AppHeader, AppFooter, AppMain } from 'formula_one'
 import NavSegment from './nav-segment'
@@ -17,7 +16,7 @@ import ChangeTheme from './change-theme'
 import main from 'formula_one/src/css/app.css'
 import block from '../css/app.css'
 
-class App extends React.PureComponent {
+class App extends React.Component {
   componentDidMount () {}
   render () {
     const creators = [
@@ -33,7 +32,7 @@ class App extends React.PureComponent {
     return (
       <React.Fragment>
         <div styleName='main.app'>
-          <AppHeader mode='site' appName='settings' userDropdown />
+          <AppHeader mode='site' appName='settings' userDropdown dummy={{}} />
           {isMobile && <Sidebar />}
           <AppMain>
             <div styleName='main.app-main'>
@@ -41,7 +40,7 @@ class App extends React.PureComponent {
 
               <Scrollbars autoHide>
                 <Container styleName='block.app-container'>
-                  <Grid stackable reversed styleName='block.app-grid'>
+                  <Grid stackable styleName='block.app-grid'>
                     {isMobile && (
                       <Grid.Row centered>
                         <Grid.Column>
@@ -86,21 +85,11 @@ class App extends React.PureComponent {
               </Scrollbars>
             </div>
           </AppMain>
-          <AppFooter creators={creators} />
+          <AppFooter userDropdown creators={creators} />
         </div>
       </React.Fragment>
     )
   }
 }
 
-function mapStateToProps (state) {
-  return {}
-}
-const mapDispatchToProps = dispatch => {
-  return {}
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App)
+export default App

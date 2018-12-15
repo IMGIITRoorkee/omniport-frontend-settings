@@ -7,7 +7,7 @@ import '../css/theme.css'
 
 import { getTheme } from 'formula_one'
 
-export default class ChangeTheme extends React.PureComponent {
+export default class ChangeTheme extends React.Component {
   componentDidMount () {}
   render () {
     return (

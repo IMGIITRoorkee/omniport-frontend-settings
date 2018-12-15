@@ -1,13 +1,10 @@
 import React from 'react'
 import { Card, Icon, Transition } from 'semantic-ui-react'
 
-import { getTheme } from 'formula_one'
-
 import '../css/theme.css'
-export default class ColorCard extends React.PureComponent {
+export default class ColorCard extends React.Component {
   setTheme = () => {
     localStorage.setItem('selectedColor', this.props.color.name)
-    // window.location.reload()
   }
   render () {
     return (
