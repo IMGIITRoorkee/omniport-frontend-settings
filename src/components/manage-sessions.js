@@ -18,10 +18,14 @@ class ManageSessions extends React.Component {
           <Header as='h3'>Manage sessions</Header>
         </Segment>
         <Segment attached='bottom'>
-          {manageSessions.loaded &&
-            manageSessions.data.map(data => {
-              return <SessionElement key={data.id} data={data} />
-            })}
+          {manageSessions.loaded && (
+            <React.Fragment>
+              <Segment>Total sessions: {manageSessions.data.length}</Segment>
+              {manageSessions.data.map(data => {
+                return <SessionElement key={data.id} data={data} />
+              })}
+            </React.Fragment>
+          )}
         </Segment>
       </div>
     )
