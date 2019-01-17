@@ -1,7 +1,7 @@
 import React from 'react'
 import { isBrowser, isMobile } from 'react-device-detect'
 import { Scrollbars } from 'react-custom-scrollbars'
-import { Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 
 import { Container, Grid } from 'semantic-ui-react'
 import Sidebar from 'core/common/src/components/primary-sidebar'
@@ -22,11 +22,13 @@ class App extends React.Component {
     const creators = [
       {
         name: 'Dhruv Bhanushali',
-        role: 'Backend developer'
+        role: 'Backend developer',
+        link: 'https://dhruvkb.github.io/'
       },
       {
         name: 'Praduman Goyal',
-        role: 'Frontend developer'
+        role: 'Frontend developer',
+        link: 'https://pradumangoyal.github.io'
       }
     ]
     return (
@@ -51,27 +53,33 @@ class App extends React.Component {
                     <Grid.Row>
                       <Grid.Column width={isBrowser ? 12 : 16}>
                         <div styleName='block.app-wrapper'>
-                          <Route
-                            exact
-                            path='/settings/'
-                            component={EditProfile}
-                          />
-                          <Route
-                            path='/settings/change_password'
-                            component={ChangePassword}
-                          />
-                          <Route
-                            path='/settings/sessions'
-                            component={ManageSessions}
-                          />
-                          <Route
-                            path='/settings/theme/'
-                            component={ChangeTheme}
-                          />
-                          <Route
-                            path='/settings/notifications'
-                            component={ManageNotifications}
-                          />
+                          <Switch>
+                            <Route
+                              exact
+                              path='/settings/'
+                              component={EditProfile}
+                            />
+                            <Route
+                              exact
+                              path='/settings/change_password'
+                              component={ChangePassword}
+                            />
+                            <Route
+                              exact
+                              path='/settings/sessions'
+                              component={ManageSessions}
+                            />
+                            <Route
+                              exact
+                              path='/settings/theme/'
+                              component={ChangeTheme}
+                            />
+                            <Route
+                              exact
+                              path='/settings/notifications'
+                              component={ManageNotifications}
+                            />
+                          </Switch>
                         </div>
                       </Grid.Column>
                       {isBrowser && (
