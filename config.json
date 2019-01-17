@@ -4,5 +4,9 @@
     "verboseName": "Settings"
   },
   "baseUrl": "/settings",
-  "source": "settings/src/index"
+  "source": "settings/src/index",
+  "primarySidebar": {
+    "icon": "setting",
+    "priority": 7
+  }
 }
