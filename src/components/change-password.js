@@ -107,12 +107,11 @@ class ChangePassword extends React.Component {
                 value={this.state.new_password}
               />
               <PasswordField
-                name='new_password'
-                verboseName='New Password'
+                name='confirm_password'
+                verboseName='Confirm Password'
                 handleChange={this.handleInputChange}
-                value={this.state.new_password}
+                value={this.state.confirm_password}
               />
-
               <Grid.Row as={Form.Field}>
                 <Grid.Column width={4} verticalAlign='middle'>
                   <Button color={getTheme()} onClick={this.handleSubmit}>
