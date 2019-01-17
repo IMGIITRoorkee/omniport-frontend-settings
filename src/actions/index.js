@@ -1,7 +1,12 @@
 import axios from 'axios'
 
 import { urlWhoAmI, getCookie } from 'formula_one'
-import { urlChangePassword, urlSessions, urlDeleteSession } from '../urls'
+import {
+  urlChangePassword,
+  urlSessions,
+  urlDeleteSession,
+  urlSettingsInformational
+} from '../urls'
 
 export const setUser = () => {
   return dispatch => {
@@ -90,8 +95,71 @@ export const deleteSession = id => {
           payload: id
         })
       })
+      .catch(err => {})
+  }
+}
+
+export const setOptions = (settingType, successCallback, errCallback) => {
+  return dispatch => {
+    axios
+      .options(urlSettingsInformational(settingType))
+      .then(res => {
+        dispatch({
+          type: `SET_OPTIONS_${settingType.toUpperCase()}`,
+          payload: {
+            optionsLoaded: true,
+            options: res.data.actions.PUT,
+            dataLoaded: false,
+            data: {}
+          }
+        })
+        successCallback(res)
+      })
       .catch(err => {
-        console.log('Erro', err)
+        errCallback(err)
+      })
+  }
+}
+
+export const setData = (settingType, successCallback, errCallback) => {
+  return dispatch => {
+    axios
+      .get(urlSettingsInformational(settingType))
+      .then(res => {
+        dispatch({
+          type: `SET_DATA_${settingType.toUpperCase()}`,
+          payload: {
+            dataLoaded: true,
+            data: res.data
+          }
+        })
+        successCallback(res)
+      })
+      .catch(err => {
+        errCallback(err)
+      })
+  }
+}
+
+export const changeData = (settingType, data, successCallback, errCallback) => {
+  let headers = {
+    'X-CSRFToken': getCookie('csrftoken')
+  }
+  return dispatch => {
+    axios
+      .patch(urlSettingsInformational(settingType), data, { headers: headers })
+      .then(res => {
+        dispatch({
+          type: `SET_DATA_${settingType.toUpperCase()}`,
+          payload: {
+            dataLoaded: true,
+            data: res.data
+          }
+        })
+        successCallback(res)
+      })
+      .catch(err => {
+        errCallback(err)
       })
   }
 }

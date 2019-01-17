@@ -2,11 +2,17 @@ import { combineReducers } from 'redux'
 import changePassword from './changePassword'
 import manageSessions from './manageSessions'
 import whoAmI from './whoAmI'
+import financialSettings from './financialSettings'
+import biologicalSettings from './biologicalSettings'
+import politicalSettings from './politicalSettings'
 
 const rootReducers = combineReducers({
   changePassword,
   manageSessions,
-  whoAmI
+  whoAmI,
+  financialSettings,
+  politicalSettings,
+  biologicalSettings
 })
 
 export default rootReducers
