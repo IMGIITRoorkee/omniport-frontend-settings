@@ -34,7 +34,7 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <div styleName='main.app'>
-          <AppHeader mode='site' appName='settings' userDropdown dummy={{}} />
+          <AppHeader userDropdown dummy={{}} />
           {isMobile && <Sidebar />}
           <AppMain>
             <div styleName='main.app-main'>
