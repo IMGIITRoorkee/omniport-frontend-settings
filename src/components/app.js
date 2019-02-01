@@ -1,11 +1,12 @@
 import React from 'react'
 import { isBrowser, isMobile } from 'react-device-detect'
 import { Scrollbars } from 'react-custom-scrollbars'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 
 import { Container, Grid } from 'semantic-ui-react'
 import Sidebar from 'core/common/src/components/primary-sidebar'
 import { AppHeader, AppFooter, AppMain } from 'formula_one'
+import { urlAppNavigation } from '../urls'
 import NavSegment from './nav-segment'
 import EditProfile from './edit-profile'
 import ChangePassword from './change-password'
@@ -39,7 +40,6 @@ class App extends React.Component {
           <AppMain>
             <div styleName='main.app-main'>
               {isBrowser && <Sidebar />}
-
               <Scrollbars autoHide>
                 <Container styleName='block.app-container'>
                   <Grid stackable styleName='block.app-grid'>
@@ -56,29 +56,39 @@ class App extends React.Component {
                           <Switch>
                             <Route
                               exact
-                              path='/settings/'
+                              path={urlAppNavigation('')}
+                              render={props => (
+                                <Redirect
+                                  to={urlAppNavigation('edit_profile')}
+                                />
+                              )}
+                            />
+                            <Route
+                              exact
+                              path={urlAppNavigation('edit_profile')}
                               component={EditProfile}
                             />
                             <Route
                               exact
-                              path='/settings/change_password'
+                              path={urlAppNavigation('change_password')}
                               component={ChangePassword}
                             />
                             <Route
                               exact
-                              path='/settings/sessions'
+                              path={urlAppNavigation('manage_sessions')}
                               component={ManageSessions}
                             />
                             <Route
                               exact
-                              path='/settings/theme/'
+                              path={urlAppNavigation('change_theme')}
                               component={ChangeTheme}
                             />
                             <Route
                               exact
-                              path='/settings/notifications'
+                              path={urlAppNavigation('manage_notifications')}
                               component={ManageNotifications}
                             />
+                            <Route render={props => <Redirect to='/404' />} />
                           </Switch>
                         </div>
                       </Grid.Column>
