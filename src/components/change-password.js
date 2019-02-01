@@ -4,7 +4,7 @@ import { isBrowser } from 'react-device-detect'
 import { Form, Grid, Segment, Button, Message, Header } from 'semantic-ui-react'
 
 import { getTheme } from 'formula_one'
-import PasswordField from '../components/form-fields/password-field'
+import PasswordField from './change-password/password-field'
 import { initialiseChangePassword, submitChangePassword } from '../actions'
 
 import '../css/change-password.css'
@@ -71,6 +71,9 @@ class ChangePassword extends React.Component {
                     this.state.message.type.charAt(0).toUpperCase() +
                     this.state.message.type.slice(1)
                   }
+                  icon={
+                    this.state.message.type === 'success' ? 'check' : 'frown'
+                  }
                   list={this.state.message.data}
                 />
               </Grid.Column>
@@ -87,6 +90,7 @@ class ChangePassword extends React.Component {
                     changePassword.type.charAt(0).toUpperCase() +
                     changePassword.type.slice(1)
                   }
+                  icon={changePassword.type === 'success' ? 'check' : 'frown'}
                   list={changePassword.data}
                 />
               </Grid.Column>
@@ -114,9 +118,13 @@ class ChangePassword extends React.Component {
               />
               <Grid.Row as={Form.Field}>
                 <Grid.Column width={4} verticalAlign='middle'>
-                  <Button color={getTheme()} onClick={this.handleSubmit}>
-                    Chage password
-                  </Button>
+                  <Button
+                    basic
+                    icon='key'
+                    color={getTheme()}
+                    onClick={this.handleSubmit}
+                    content='Change password'
+                  />
                 </Grid.Column>
               </Grid.Row>
             </Grid>

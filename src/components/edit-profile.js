@@ -19,9 +19,11 @@ class EditProfile extends React.Component {
     return (
       <div styleName='edit-profile-wrapper'>
         <ProfileCard />
-        {['biological', 'financial', 'political'].map(settingType => {
-          return <SettingInfo settingType={settingType} key={settingType} />
-        })}
+        {['biological', 'financial', 'political', 'residential'].map(
+          settingType => {
+            return <SettingInfo settingType={settingType} key={settingType} />
+          }
+        )}
       </div>
     )
   }

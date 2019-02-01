@@ -48,7 +48,12 @@ class SettingInfo extends React.Component {
     )
   }
 
-  errOptionsCallback = err => {}
+  errOptionsCallback = err => {
+    this.setState({
+      error: true,
+      success: false
+    })
+  }
 
   successDataCallback = res => {
     this.setState({ ...res.data })
@@ -59,6 +64,14 @@ class SettingInfo extends React.Component {
   handleChange = (name, value) => {
     this.setState({
       [name]: value
+    })
+  }
+
+  nullResponseMessage = () => {
+    this.setState({
+      success: false,
+      message: {},
+      error: false
     })
   }
 
@@ -76,11 +89,13 @@ class SettingInfo extends React.Component {
   }
 
   successSubmitCallback = res => {
+    const { data } = res
     this.setState({
       success: true,
       error: false,
-      message: res.data
+      ...data
     })
+    setTimeout(this.nullResponseMessage, 3000)
   }
 
   errSubmitCallback = err => {
@@ -104,6 +119,7 @@ class SettingInfo extends React.Component {
             {error && (
               <Message
                 negative
+                icon='frown'
                 header='Error'
                 list={Object.keys(message)
                   .map(cat => {
@@ -120,7 +136,8 @@ class SettingInfo extends React.Component {
               <Message
                 positive
                 header='Success'
-                content='Successfuly updated profile.'
+                content={`Successfuly updated ${settingType} information.`}
+                icon='check'
               />
             )}
             <Grid stackable styleName='form-container'>
@@ -137,10 +154,7 @@ class SettingInfo extends React.Component {
                           name={field}
                           handleChange={this.handleChange}
                           value={this.state[field]}
-                          /**
-                           * ToDo: Send errors from here
-                           * **/
-                          error={errorExist(message, field)}
+                          error={error && errorExist(message, field)}
                         />
                       )
                     )
@@ -173,7 +187,8 @@ const mapStateToProps = state => {
     whoAmI: state.whoAmI,
     financialSettings: state.financialSettings,
     biologicalSettings: state.biologicalSettings,
-    politicalSettings: state.politicalSettings
+    politicalSettings: state.politicalSettings,
+    residentialSettings: state.residentialSettings
   }
 }
 const mapDispatchToProps = dispatch => {
