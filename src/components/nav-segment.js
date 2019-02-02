@@ -19,6 +19,11 @@ export default class NavSegment extends Component {
         link: 'change_password'
       },
       {
+        name: 'change_secret_question_answer',
+        heading: 'Change secret Q&A',
+        link: 'change_secret_question_answer'
+      },
+      {
         name: 'theme',
         heading: 'Change theme',
         link: 'change_theme'

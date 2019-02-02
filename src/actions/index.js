@@ -2,7 +2,9 @@ import axios from 'axios'
 
 import { urlWhoAmI, getCookie } from 'formula_one'
 import {
+  urlChangeProfile,
   urlChangePassword,
+  urlChangeSecret,
   urlSessions,
   urlDeleteSession,
   urlSettingsInformational
@@ -19,6 +21,63 @@ export const setUser = () => {
         })
       })
       .catch(err => {})
+  }
+}
+
+export const setSecret = (successCallback, errCallback) => {
+  return dispatch => {
+    axios
+      .get(urlChangeSecret())
+      .then(res => {
+        dispatch({
+          type: 'CHANGE_SECRET',
+          payload: res.data
+        })
+        successCallback(res)
+      })
+      .catch(err => {
+        errCallback(err)
+      })
+  }
+}
+
+export const changeSecret = (data, successCallback, errCallback) => {
+  let headers = {
+    'X-CSRFToken': getCookie('csrftoken')
+  }
+  return dispatch => {
+    axios
+      .post(urlChangeSecret(), data, { headers: headers })
+      .then(res => {
+        dispatch({
+          type: 'CHANGE_SECRET',
+          payload: res.data
+        })
+        successCallback(res)
+      })
+      .catch(err => {
+        errCallback(err)
+      })
+  }
+}
+
+export const setDisplayPicture = (formData, successCallback, errCallback) => {
+  let headers = {
+    'X-CSRFToken': getCookie('csrftoken')
+  }
+  return dispatch => {
+    axios
+      .put(urlChangeProfile(), formData, { headers: headers })
+      .then(res => {
+        dispatch({
+          type: 'UPDATE_PROFILE_PICTURE',
+          payload: res.data.displayPicture
+        })
+        successCallback(res)
+      })
+      .catch(err => {
+        errCallback(err)
+      })
   }
 }
 

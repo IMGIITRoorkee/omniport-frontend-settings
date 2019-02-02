@@ -119,7 +119,7 @@ class SettingInfo extends React.Component {
             {error && (
               <Message
                 negative
-                icon='frown'
+                icon='frown outline'
                 header='Error'
                 list={Object.keys(message)
                   .map(cat => {
@@ -136,7 +136,7 @@ class SettingInfo extends React.Component {
               <Message
                 positive
                 header='Success'
-                content={`Successfuly updated ${settingType} information.`}
+                content={`Successfully updated ${settingType} information.`}
                 icon='check'
               />
             )}

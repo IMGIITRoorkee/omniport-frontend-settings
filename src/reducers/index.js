@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import changePassword from './changePassword'
+import changeSecret from './changeSecret'
 import manageSessions from './manageSessions'
 import whoAmI from './whoAmI'
 import financialSettings from './financialSettings'
@@ -9,6 +10,7 @@ import residentialSettings from './residentialSettings'
 
 const rootReducers = combineReducers({
   changePassword,
+  changeSecret,
   manageSessions,
   whoAmI,
   financialSettings,

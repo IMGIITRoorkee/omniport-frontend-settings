@@ -7,8 +7,6 @@ import { getTheme } from 'formula_one'
 import PasswordField from './change-password/password-field'
 import { initialiseChangePassword, submitChangePassword } from '../actions'
 
-import '../css/change-password.css'
-
 class ChangePassword extends React.Component {
   state = {
     old_password: '',
@@ -56,7 +54,7 @@ class ChangePassword extends React.Component {
   render () {
     const { changePassword } = this.props
     return (
-      <div styleName='change-password-wrapper'>
+      <div>
         <Segment color={getTheme()} attached='top'>
           <Header as='h3'>Change password</Header>
         </Segment>
@@ -72,7 +70,9 @@ class ChangePassword extends React.Component {
                     this.state.message.type.slice(1)
                   }
                   icon={
-                    this.state.message.type === 'success' ? 'check' : 'frown'
+                    this.state.message.type === 'success'
+                      ? 'check'
+                      : 'frown outline'
                   }
                   list={this.state.message.data}
                 />
@@ -90,7 +90,11 @@ class ChangePassword extends React.Component {
                     changePassword.type.charAt(0).toUpperCase() +
                     changePassword.type.slice(1)
                   }
-                  icon={changePassword.type === 'success' ? 'check' : 'frown'}
+                  icon={
+                    changePassword.type === 'success'
+                      ? 'check'
+                      : 'frown outline'
+                  }
                   list={changePassword.data}
                 />
               </Grid.Column>

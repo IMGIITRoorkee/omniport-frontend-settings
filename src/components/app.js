@@ -10,6 +10,7 @@ import { urlAppNavigation } from '../urls'
 import NavSegment from './nav-segment'
 import EditProfile from './edit-profile'
 import ChangePassword from './change-password'
+import ChangeSecrets from './change-secrets'
 import ManageSessions from './manage-sessions'
 import ManageNotifications from './manage-notifications'
 import ChangeTheme from './change-theme'
@@ -72,6 +73,13 @@ class App extends React.Component {
                               exact
                               path={urlAppNavigation('change_password')}
                               component={ChangePassword}
+                            />
+                            <Route
+                              exact
+                              path={urlAppNavigation(
+                                'change_secret_question_answer'
+                              )}
+                              component={ChangeSecrets}
                             />
                             <Route
                               exact

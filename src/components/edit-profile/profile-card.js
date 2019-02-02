@@ -1,56 +1,336 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { map } from 'lodash'
-import { Segment, Grid, Header, Image, Button } from 'semantic-ui-react'
+import {
+  Segment,
+  Dimmer,
+  Header,
+  Image,
+  Button,
+  Icon,
+  Modal
+} from 'semantic-ui-react'
 import { isMobile } from 'react-device-detect'
 
-import { getTheme, getThemeObject, DefaultDP } from 'formula_one'
-import '../../css/edit-profile.css'
+import { getTheme, DefaultDP, CustomCropper, ifRole } from 'formula_one'
+import { setDisplayPicture } from '../../actions'
+import inline from 'formula_one/src/css/inline.css'
+import blocks from '../../css/edit-profile.css'
 
 class ProfileCard extends React.Component {
-  componentDidMount () {}
+  constructor (props) {
+    super(props)
+    this.state = {
+      activeProfileDimmer: false,
+      cropperDisplay: false,
+      crop: {
+        aspect: 1
+      },
+      removerDisplay: false
+    }
+  }
+  handleShowProfileDimmer = () => {
+    this.setState({ activeProfileDimmer: true })
+  }
+  handleHideProfileDimmer = () => this.setState({ activeProfileDimmer: false })
+  handleCloseModal = () => {
+    this.setState({
+      fileSrc: '',
+      crop: { aspect: 1 },
+      activeProfileDimmer: false
+    })
+  }
+  handleRemoverOpenModal = () => {
+    this.setState({
+      removerDisplay: true,
+      activeProfileDimmer: false
+    })
+  }
+  handleRemoverCloseModal = () => {
+    this.setState({
+      removerDisplay: false,
+      activeProfileDimmer: false
+    })
+  }
+  fileChange = e => {
+    if (e.target.files && e.target.files.length > 0) {
+      const reader = new FileReader()
+      reader.addEventListener('load', () =>
+        this.setState({
+          fileSrc: reader.result,
+          crop: { aspect: 1 }
+        })
+      )
+      reader.readAsDataURL(e.target.files[0])
+      this.setState({
+        fileName: e.target.files[0].name
+      })
+    }
+  }
+  onImageLoaded = (image, pixelCrop) => {
+    this.imageRef = image
+  }
+  onCropComplete = (crop, pixelCrop) => {
+    this.makeClientCrop(crop, pixelCrop)
+  }
+  onCropChange = crop => {
+    this.setState({ crop })
+  }
+  async makeClientCrop (crop, pixelCrop) {
+    if (this.imageRef && crop.width && crop.height) {
+      const croppedImageUrl = await this.getCroppedImg(
+        this.imageRef,
+        pixelCrop,
+        this.state.fileName
+      )
+      this.setState({ croppedImageUrl })
+    }
+  }
+
+  getCroppedImg (image, pixelCrop, fileName) {
+    const canvas = document.createElement('canvas')
+    canvas.width = pixelCrop.width
+    canvas.height = pixelCrop.height
+    const ctx = canvas.getContext('2d')
+
+    ctx.drawImage(
+      image,
+      pixelCrop.x,
+      pixelCrop.y,
+      pixelCrop.width,
+      pixelCrop.height,
+      0,
+      0,
+      pixelCrop.width,
+      pixelCrop.height
+    )
+
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(blob => {
+        if (!blob) {
+          // reject(new Error('Canvas is empty'));
+          return
+        }
+        blob.name = fileName
+        window.URL.revokeObjectURL(this.fileUrl)
+        this.fileUrl = window.URL.createObjectURL(blob)
+        this.setState({
+          fileToSend: blob
+        })
+        resolve(this.fileUrl)
+      }, 'image/jpeg')
+    })
+  }
+  uploadImage = () => {
+    const formData = new FormData()
+    formData.append(
+      'display_picture',
+      this.state.fileToSend,
+      this.state.fileName
+    )
+    this.props.SetDisplayPicture(
+      formData,
+      this.successCallback,
+      this.errCallback
+    )
+  }
+  removeLogo = () => {
+    this.props.SetDisplayPicture({ display_picture: null })
+  }
+  successCallback = res => {
+    this.setState({
+      error: false,
+      message: '',
+      fileSrc: false
+    })
+  }
+  errCallback = err => {
+    this.setState({
+      error: true,
+      message: err.response.data
+    })
+  }
+
+  renderRole = () => {
+    const { whoAmI } = this.props
+    const { data } = whoAmI
+    if (ifRole(data.roles, 'Maintainer') !== 'NOT_ROLE') {
+      const maintainer = data.roles.find(x => x.role === 'Maintainer')
+      return (
+        <React.Fragment>
+          {`${maintainer.data.designation}, ${maintainer.data.post}`}
+        </React.Fragment>
+      )
+    } else if (ifRole(data.roles, 'Faculty') !== 'NOT_ROLE') {
+      const faculty = data.roles.find(x => x.role === 'Faculty')
+      return (
+        <React.Fragment>{faculty.data.branch.department.name}</React.Fragment>
+      )
+    } else if (ifRole(data.roles, 'Student') !== 'NOT_ROLE') {
+      const student = data.roles.find(x => x.role === 'Student')
+      return (
+        <React.Fragment>
+          {`${student.data.branch.name}, 
+            ${student.data.branch.department.name}`}
+        </React.Fragment>
+      )
+    }
+  }
+
   render () {
     const { whoAmI } = this.props
+    const { activeProfileDimmer, inEditMode, fileSrc, crop } = this.state
     return (
-      <div styleName='profile-card-wrapper'>
+      <div styleName='blocks.profile-card-wrapper'>
+        <Modal
+          open={Boolean(fileSrc)}
+          onClose={this.handleCloseModal}
+          centered
+          size='tiny'
+        >
+          <Header>Crop profile picture</Header>
+          <Modal.Content>
+            <p>
+              Drag over the region of the image you want to keep. You can move
+              or resize the area. Click on <strong>Done</strong> to confirm.
+            </p>
+            <div styleName='blocks.image-preview'>
+              <CustomCropper
+                src={fileSrc}
+                crop={crop}
+                onClose={this.handleHideProfileDimmer}
+                onImageLoaded={this.onImageLoaded}
+                onComplete={this.onCropComplete}
+                onChange={this.onCropChange}
+              />
+            </div>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button
+              basic
+              icon='left arrow'
+              content='Keep current'
+              secondary
+              onClick={this.handleCloseModal}
+            />
+            <Button
+              basic
+              icon='photo'
+              content='Done'
+              primary
+              onClick={this.uploadImage}
+            />
+          </Modal.Actions>
+        </Modal>
         <Segment color={getTheme()}>
           <div
             styleName={`${
-              isMobile ? 'profile-card-mobile' : 'profile-card-desktop'
+              isMobile
+                ? 'blocks.profile-card-mobile'
+                : 'blocks.profile-card-desktop'
             }`}
           >
-            {whoAmI.loaded && whoAmI.data.displayPicture ? (
-              <Image
-                src={whoAmI.data.displayPicture}
-                circular
-                styleName='display-avatar'
-              />
-            ) : (
-              <DefaultDP
-                name={
-                  whoAmI.loaded && whoAmI.data.fullName
-                    ? whoAmI.data.fullName.toUpperCase()
-                    : ''
-                }
-                size='4em'
-              />
-            )}
-            <div
-              styleName={`display-desc ${isMobile ? 'text-align-center' : ''}`}
+            <Dimmer.Dimmable
+              dimmed={activeProfileDimmer}
+              onMouseEnter={this.handleShowProfileDimmer}
+              onMouseLeave={this.handleHideProfileDimmer}
             >
-              <Header as='h4' styleName='display-desc-header'>
-                {whoAmI.loaded && whoAmI.data.fullName}
-                <Header.Subheader>
-                  {whoAmI.loaded && map(whoAmI.data.roles, 'role').join(', ')}
-                </Header.Subheader>
-              </Header>
-              <div
-                styleName={`display-desc-button ${
-                  isMobile ? 'text-align-center' : ''
-                }`}
+              {whoAmI.loaded && whoAmI.data.displayPicture ? (
+                <Image
+                  src={whoAmI.data.displayPicture}
+                  circular
+                  styleName='blocks.display-avatar'
+                />
+              ) : (
+                <DefaultDP
+                  name={
+                    whoAmI.loaded && whoAmI.data.fullName
+                      ? whoAmI.data.fullName.toUpperCase()
+                      : ''
+                  }
+                  size='4em'
+                />
+              )}
+              <Dimmer
+                active={activeProfileDimmer}
+                style={{ borderRadius: '9999em' }}
               >
-                <Button color={getTheme()}>Edit Profile Picture</Button>
+                {inEditMode === 'profile' ? (
+                  <Loader active={inEditMode === 'profile'} />
+                ) : (
+                  <React.Fragment>
+                    {whoAmI.data.displayPicture && (
+                      <Modal
+                        trigger={
+                          <Icon
+                            name='erase'
+                            bordered
+                            onClick={this.handleRemoverOpenModal}
+                          />
+                        }
+                        open={this.state.removerDisplay}
+                        onClose={this.handleRemoverCloseModal}
+                        size='mini'
+                      >
+                        <Header>Are you sure?</Header>
+                        <Modal.Content>
+                          Are you sure to continue this irreversible action?
+                        </Modal.Content>
+                        <Modal.Actions>
+                          <Button
+                            basic
+                            icon='left arrow'
+                            content='Keep'
+                            positive
+                            onClick={this.handleRemoverCloseModal}
+                          />
+                          <Button
+                            basic
+                            icon='trash alternate'
+                            content='Delete'
+                            negative
+                            onClick={this.removeLogo}
+                          />
+                        </Modal.Actions>
+                      </Modal>
+                    )}
+                    <label htmlFor='profile'>
+                      <Icon name='pencil' />
+                    </label>
+                    <input
+                      type='file'
+                      onChange={this.fileChange}
+                      name='profile'
+                      id='profile'
+                      accept='image/*'
+                      styleName='inline.display-none'
+                    />
+                  </React.Fragment>
+                )}
+              </Dimmer>
+            </Dimmer.Dimmable>
+            <div
+              styleName={`blocks.display-desc ${
+                isMobile ? 'blocks.text-align-center' : ''
+              }`}
+            >
+              <div>
+                <Header as='h4' styleName='blocks.display-desc-header'>
+                  {whoAmI.loaded && whoAmI.data.fullName}
+                  <Header.Subheader>
+                    <p>
+                      {whoAmI.loaded &&
+                        map(whoAmI.data.roles, 'role').join(', ')}
+                    </p>
+                    {whoAmI.loaded && this.renderRole()}
+                  </Header.Subheader>
+                </Header>
               </div>
+              <div
+                styleName={`blocks.display-desc-button ${
+                  isMobile ? 'blocks.text-align-center' : ''
+                }`}
+              />
             </div>
           </div>
         </Segment>
@@ -65,7 +345,11 @@ const mapStateToProps = state => {
   }
 }
 const mapDispatchToProps = dispatch => {
-  return {}
+  return {
+    SetDisplayPicture: (formData, successCallback, errCallback) => {
+      dispatch(setDisplayPicture(formData, successCallback, errCallback))
+    }
+  }
 }
 
 export default connect(
