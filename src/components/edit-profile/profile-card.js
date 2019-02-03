@@ -182,17 +182,13 @@ class ProfileCard extends React.Component {
     const { activeProfileDimmer, inEditMode, fileSrc, crop } = this.state
     return (
       <div styleName='blocks.profile-card-wrapper'>
-        <Modal
-          open={Boolean(fileSrc)}
-          onClose={this.handleCloseModal}
-          centered
-          size='tiny'
-        >
+        <Modal open={Boolean(fileSrc)} centered size='tiny'>
           <Header>Crop profile picture</Header>
           <Modal.Content>
             <p>
-              Drag over the region of the image you want to keep. You can move
-              or resize the area. Click on <strong>Done</strong> to confirm.
+              you want Drag over the region of the image you want to keep. You
+              can move or resize the area. Click on <strong>Done</strong> to
+              confirm.
             </p>
             <div styleName='blocks.image-preview'>
               <CustomCropper
@@ -274,7 +270,8 @@ class ProfileCard extends React.Component {
                       >
                         <Header>Are you sure?</Header>
                         <Modal.Content>
-                          Are you sure to continue this irreversible action?
+                          Are you sure you want to continue this irreversible
+                          action?
                         </Modal.Content>
                         <Modal.Actions>
                           <Button
