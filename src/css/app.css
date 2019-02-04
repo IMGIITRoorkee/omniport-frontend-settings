@@ -3,18 +3,18 @@
     flex-direction: column;
     height: 100%;
 }
+
 .app-main{
     display: flex;
     flex-grow: 1;
     flex-direction: row;
     height: 100%;
 }
-.app-container{
-    margin-top: 1em;
-}
+
 .app-grid{
     height: 100%;
 }
+
 .app-wrapper{
     height: 100%;
 }

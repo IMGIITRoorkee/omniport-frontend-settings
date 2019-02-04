@@ -1,9 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { isBrowser } from 'react-device-detect'
 
+import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
 import ProfileCard from './edit-profile/profile-card'
 import SettingInfo from './edit-profile/setting-info'
 import { setUser } from '../actions'
+import { appBaseURL } from '../urls'
 import '../css/edit-profile.css'
 
 class EditProfile extends React.Component {
@@ -17,7 +20,15 @@ class EditProfile extends React.Component {
   }
   render () {
     return (
-      <div styleName='edit-profile-wrapper'>
+      <div>
+        {isBrowser && (
+          <CustomBreadcrumb
+            list={[
+              { name: 'Settings', link: appBaseURL() },
+              { name: 'Edit profile' }
+            ]}
+          />
+        )}
         <ProfileCard />
         {['biological', 'financial', 'political', 'residential'].map(
           settingType => {

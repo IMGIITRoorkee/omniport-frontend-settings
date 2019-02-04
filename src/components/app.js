@@ -42,7 +42,7 @@ class App extends React.Component {
             <div styleName='main.app-main'>
               {isBrowser && <Sidebar />}
               <Scrollbars autoHide>
-                <Container styleName='block.app-container'>
+                <Container>
                   <Grid stackable styleName='block.app-grid'>
                     {isMobile && (
                       <Grid.Row centered>

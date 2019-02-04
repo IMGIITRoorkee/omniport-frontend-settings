@@ -1,6 +1,7 @@
 .nav-container{
     display: flex;
     justify-content: center;
+    margin-top: 1.5em;
 }
 .nav-menu{
     width: 100% !important;

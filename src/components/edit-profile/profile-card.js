@@ -12,7 +12,7 @@ import {
 } from 'semantic-ui-react'
 import { isMobile } from 'react-device-detect'
 
-import { getTheme, DefaultDP, CustomCropper, ifRole } from 'formula_one'
+import { DefaultDP, CustomCropper, ifRole, getTheme } from 'formula_one'
 import { setDisplayPicture } from '../../actions'
 import inline from 'formula_one/src/css/inline.css'
 import blocks from '../../css/edit-profile.css'
@@ -134,7 +134,7 @@ class ProfileCard extends React.Component {
       this.errCallback
     )
   }
-  removeLogo = () => {
+  removeImage = () => {
     this.props.SetDisplayPicture({ display_picture: null })
   }
   successCallback = res => {
@@ -182,7 +182,7 @@ class ProfileCard extends React.Component {
     const { activeProfileDimmer, inEditMode, fileSrc, crop } = this.state
     return (
       <div styleName='blocks.profile-card-wrapper'>
-        <Modal open={Boolean(fileSrc)} centered size='tiny'>
+        <Modal open={Boolean(fileSrc)} centered size='tiny' closeIcon>
           <Header>Crop profile picture</Header>
           <Modal.Content>
             <p>
@@ -267,6 +267,7 @@ class ProfileCard extends React.Component {
                         open={this.state.removerDisplay}
                         onClose={this.handleRemoverCloseModal}
                         size='mini'
+                        closeIcon
                       >
                         <Header>Are you sure?</Header>
                         <Modal.Content>
@@ -286,7 +287,7 @@ class ProfileCard extends React.Component {
                             icon='trash alternate'
                             content='Delete'
                             negative
-                            onClick={this.removeLogo}
+                            onClick={this.removeImage}
                           />
                         </Modal.Actions>
                       </Modal>

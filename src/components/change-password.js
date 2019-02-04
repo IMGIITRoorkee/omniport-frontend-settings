@@ -3,9 +3,11 @@ import { connect } from 'react-redux'
 import { isBrowser } from 'react-device-detect'
 import { Form, Grid, Segment, Button, Message, Header } from 'semantic-ui-react'
 
+import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
 import { getTheme } from 'formula_one'
 import PasswordField from './change-password/password-field'
 import { initialiseChangePassword, submitChangePassword } from '../actions'
+import { appBaseURL } from '../urls'
 
 class ChangePassword extends React.Component {
   state = {
@@ -55,6 +57,14 @@ class ChangePassword extends React.Component {
     const { changePassword } = this.props
     return (
       <div>
+        {isBrowser && (
+          <CustomBreadcrumb
+            list={[
+              { name: 'Settings', link: appBaseURL() },
+              { name: 'Change password' }
+            ]}
+          />
+        )}
         <Segment color={getTheme()} attached='top'>
           <Header as='h3'>Change password</Header>
         </Segment>

@@ -1,9 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Header, Segment } from 'semantic-ui-react'
+import { isBrowser } from 'react-device-detect'
 
+import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
 import { getTheme } from 'formula_one'
 import { setSessionList } from '../actions/'
+import { appBaseURL } from '../urls'
 import SessionElement from './manage-sessions/session-element'
 
 class ManageSessions extends React.Component {
@@ -14,6 +17,14 @@ class ManageSessions extends React.Component {
     const { manageSessions } = this.props
     return (
       <div>
+        {isBrowser && (
+          <CustomBreadcrumb
+            list={[
+              { name: 'Settings', link: appBaseURL() },
+              { name: 'Manage sessions' }
+            ]}
+          />
+        )}
         <Segment color={getTheme()} attached='top'>
           <Header as='h3'>Manage sessions</Header>
         </Segment>

@@ -4,9 +4,10 @@ import { Form, Grid, Segment, Button, Message, Header } from 'semantic-ui-react'
 import { isBrowser } from 'react-device-detect'
 import { capitalize, startCase } from 'lodash'
 
+import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
 import { getTheme } from 'formula_one'
 import { setSecret, changeSecret } from '../actions'
-import { urlLogin } from '../urls'
+import { appBaseURL } from '../urls'
 import { errorExist } from '../utils'
 
 class ChangeSecrets extends React.Component {
@@ -70,6 +71,14 @@ class ChangeSecrets extends React.Component {
     } = this.state
     return (
       <div>
+        {isBrowser && (
+          <CustomBreadcrumb
+            list={[
+              { name: 'Settings', link: appBaseURL() },
+              { name: 'Change secret Q&A' }
+            ]}
+          />
+        )}
         <Segment color={getTheme()} attached='top'>
           <Header as='h3'>Change secret Q&A</Header>
         </Segment>

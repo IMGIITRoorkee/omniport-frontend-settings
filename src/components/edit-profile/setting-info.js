@@ -110,8 +110,8 @@ class SettingInfo extends React.Component {
     const { settingType } = this.props
     const { error, message, success } = this.state
     return (
-      <div styleName='profile-card-wrapper'>
-        <Segment color={getTheme()} attached='top'>
+      <React.Fragment>
+        <Segment attached='top'>
           <Header as='h3'>{capitalize(settingType)} information</Header>
         </Segment>
         <Segment attached='bottom'>
@@ -177,7 +177,7 @@ class SettingInfo extends React.Component {
             </Grid>
           </Form>
         </Segment>
-      </div>
+      </React.Fragment>
     )
   }
 }

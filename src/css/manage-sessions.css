@@ -8,6 +8,7 @@
 }
 .session-description-container{
     flex-grow: 1;
+    line-height: 1.75;
 }
 .session-button-container{
     display: flex;
