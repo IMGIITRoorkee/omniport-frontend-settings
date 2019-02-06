@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Header, Segment } from 'semantic-ui-react'
+import { Header, Segment, Placeholder } from 'semantic-ui-react'
 import { isBrowser } from 'react-device-detect'
 
 import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
@@ -17,23 +17,45 @@ class ManageSessions extends React.Component {
     const { manageSessions } = this.props
     return (
       <div>
-        {isBrowser && (
-          <CustomBreadcrumb
-            list={[
-              { name: 'Settings', link: appBaseURL() },
-              { name: 'Manage sessions' }
-            ]}
-          />
-        )}
+        <CustomBreadcrumb
+          list={[
+            { name: 'Settings', link: appBaseURL() },
+            { name: 'Manage sessions' }
+          ]}
+        />
         <Segment color={getTheme()} attached='top'>
           <Header as='h3'>Manage sessions</Header>
         </Segment>
         <Segment attached='bottom'>
-          {manageSessions.loaded && (
+          {manageSessions.loaded ? (
             <React.Fragment>
               <Segment>Total sessions: {manageSessions.data.length}</Segment>
               {manageSessions.data.map(data => {
                 return <SessionElement key={data.id} data={data} />
+              })}
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <Segment>
+                <Placeholder>
+                  <Placeholder.Header>
+                    <Placeholder.Line length='short' />
+                  </Placeholder.Header>
+                </Placeholder>
+              </Segment>
+              {[...Array(6)].map((item, index) => {
+                return (
+                  <Segment>
+                    <Placeholder>
+                      <Placeholder.Header image={isBrowser}>
+                        <Placeholder.Line length='short' />
+                        <Placeholder.Line length='short' />
+                        <Placeholder.Line length='short' />
+                        <Placeholder.Line length='short' />
+                      </Placeholder.Header>
+                    </Placeholder>
+                  </Segment>
+                )
               })}
             </React.Fragment>
           )}

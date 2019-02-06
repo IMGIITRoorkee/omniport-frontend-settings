@@ -57,14 +57,12 @@ class ChangePassword extends React.Component {
     const { changePassword } = this.props
     return (
       <div>
-        {isBrowser && (
-          <CustomBreadcrumb
-            list={[
-              { name: 'Settings', link: appBaseURL() },
-              { name: 'Change password' }
-            ]}
-          />
-        )}
+        <CustomBreadcrumb
+          list={[
+            { name: 'Settings', link: appBaseURL() },
+            { name: 'Change password' }
+          ]}
+        />
         <Segment color={getTheme()} attached='top'>
           <Header as='h3'>Change password</Header>
         </Segment>

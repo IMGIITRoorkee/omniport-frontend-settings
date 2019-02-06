@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { isBrowser } from 'react-device-detect'
 
 import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
 import ProfileCard from './edit-profile/profile-card'
@@ -21,14 +20,12 @@ class EditProfile extends React.Component {
   render () {
     return (
       <div>
-        {isBrowser && (
-          <CustomBreadcrumb
-            list={[
-              { name: 'Settings', link: appBaseURL() },
-              { name: 'Edit profile' }
-            ]}
-          />
-        )}
+        <CustomBreadcrumb
+          list={[
+            { name: 'Settings', link: appBaseURL() },
+            { name: 'Edit profile' }
+          ]}
+        />
         <ProfileCard />
         {['biological', 'financial', 'political', 'residential'].map(
           settingType => {

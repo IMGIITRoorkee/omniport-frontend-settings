@@ -71,14 +71,12 @@ class ChangeSecrets extends React.Component {
     } = this.state
     return (
       <div>
-        {isBrowser && (
-          <CustomBreadcrumb
-            list={[
-              { name: 'Settings', link: appBaseURL() },
-              { name: 'Change secret Q&A' }
-            ]}
-          />
-        )}
+        <CustomBreadcrumb
+          list={[
+            { name: 'Settings', link: appBaseURL() },
+            { name: 'Change secret Q&A' }
+          ]}
+        />
         <Segment color={getTheme()} attached='top'>
           <Header as='h3'>Change secret Q&A</Header>
         </Segment>

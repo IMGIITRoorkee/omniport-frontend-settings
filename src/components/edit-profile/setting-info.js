@@ -6,7 +6,7 @@ import {
   Header,
   Form,
   Button,
-  Loader,
+  Placeholder,
   Message
 } from 'semantic-ui-react'
 import { capitalize, startCase } from 'lodash'
@@ -161,7 +161,21 @@ class SettingInfo extends React.Component {
                   }
                 )
               ) : (
-                <Loader />
+                <React.Fragment>
+                  {[...Array(4)].map((item, index) => {
+                    return (
+                      <Grid.Row key={index}>
+                        <Placeholder
+                          style={{ width: '100%', marginLeft: '1em' }}
+                        >
+                          <Placeholder.Image
+                            style={{ width: '100%', height: '3em' }}
+                          />
+                        </Placeholder>
+                      </Grid.Row>
+                    )
+                  })}
+                </React.Fragment>
               )}
               <Grid.Row as={Form.Field}>
                 <Grid.Column width={4} verticalAlign='middle'>

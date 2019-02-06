@@ -8,7 +8,8 @@ import {
   Image,
   Button,
   Icon,
-  Modal
+  Modal,
+  Placeholder
 } from 'semantic-ui-react'
 import { isMobile } from 'react-device-detect'
 
@@ -231,21 +232,27 @@ class ProfileCard extends React.Component {
               onMouseEnter={this.handleShowProfileDimmer}
               onMouseLeave={this.handleHideProfileDimmer}
             >
-              {whoAmI.loaded && whoAmI.data.displayPicture ? (
-                <Image
-                  src={whoAmI.data.displayPicture}
-                  circular
-                  styleName='blocks.display-avatar'
-                />
+              {whoAmI.loaded ? (
+                whoAmI.data.displayPicture ? (
+                  <Image
+                    src={whoAmI.data.displayPicture}
+                    circular
+                    styleName='blocks.display-avatar'
+                  />
+                ) : (
+                  <DefaultDP
+                    name={
+                      whoAmI.loaded && whoAmI.data.fullName
+                        ? whoAmI.data.fullName.toUpperCase()
+                        : ''
+                    }
+                    size='4em'
+                  />
+                )
               ) : (
-                <DefaultDP
-                  name={
-                    whoAmI.loaded && whoAmI.data.fullName
-                      ? whoAmI.data.fullName.toUpperCase()
-                      : ''
-                  }
-                  size='4em'
-                />
+                <Placeholder style={{ width: '6em', height: '6em' }}>
+                  <Placeholder.Image square />
+                </Placeholder>
               )}
               <Dimmer
                 active={activeProfileDimmer}
@@ -312,23 +319,25 @@ class ProfileCard extends React.Component {
                 isMobile ? 'blocks.text-align-center' : ''
               }`}
             >
-              <div>
-                <Header as='h4' styleName='blocks.display-desc-header'>
-                  {whoAmI.loaded && whoAmI.data.fullName}
-                  <Header.Subheader>
-                    <p>
-                      {whoAmI.loaded &&
-                        map(whoAmI.data.roles, 'role').join(', ')}
-                    </p>
-                    {whoAmI.loaded && this.renderRole()}
-                  </Header.Subheader>
-                </Header>
-              </div>
-              <div
-                styleName={`blocks.display-desc-button ${
-                  isMobile ? 'blocks.text-align-center' : ''
-                }`}
-              />
+              {whoAmI.loaded ? (
+                <div>
+                  <Header as='h4' styleName='blocks.display-desc-header'>
+                    {whoAmI.data.fullName}
+                    <Header.Subheader>
+                      <p>{map(whoAmI.data.roles, 'role').join(', ')}</p>
+                      {this.renderRole()}
+                    </Header.Subheader>
+                  </Header>
+                </div>
+              ) : (
+                <Placeholder>
+                  <Placeholder.Paragraph>
+                    <Placeholder.Line length='short' />
+                    <Placeholder.Line length='medium' />
+                    <Placeholder.Line length='long' />
+                  </Placeholder.Paragraph>
+                </Placeholder>
+              )}
             </div>
           </div>
         </Segment>
