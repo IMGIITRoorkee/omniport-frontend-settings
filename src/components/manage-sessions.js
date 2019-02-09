@@ -24,7 +24,7 @@ class ManageSessions extends React.Component {
           ]}
         />
         <Segment color={getTheme()} attached='top'>
-          <Header as='h3'>Manage sessions</Header>
+          <Header as='h4'>Manage sessions</Header>
         </Segment>
         <Segment attached='bottom'>
           {manageSessions.loaded ? (

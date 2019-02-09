@@ -15,6 +15,7 @@ import { isMobile } from 'react-device-detect'
 
 import { DefaultDP, CustomCropper, ifRole, getTheme } from 'formula_one'
 import { setDisplayPicture } from '../../actions'
+
 import inline from 'formula_one/src/css/inline.css'
 import blocks from '../../css/edit-profile.css'
 
@@ -38,7 +39,8 @@ class ProfileCard extends React.Component {
     this.setState({
       fileSrc: '',
       crop: { aspect: 1 },
-      activeProfileDimmer: false
+      activeProfileDimmer: false,
+      fileToSend: ''
     })
   }
   handleRemoverOpenModal = () => {
@@ -64,8 +66,10 @@ class ProfileCard extends React.Component {
       )
       reader.readAsDataURL(e.target.files[0])
       this.setState({
-        fileName: e.target.files[0].name
+        fileName: e.target.files[0].name,
+        removerDisplay: false
       })
+      e.target.value = ''
     }
   }
   onImageLoaded = (image, pixelCrop) => {
@@ -142,7 +146,8 @@ class ProfileCard extends React.Component {
     this.setState({
       error: false,
       message: '',
-      fileSrc: false
+      fileSrc: false,
+      fileToSend: ''
     })
   }
   errCallback = err => {
@@ -183,7 +188,14 @@ class ProfileCard extends React.Component {
     const { activeProfileDimmer, inEditMode, fileSrc, crop } = this.state
     return (
       <div styleName='blocks.profile-card-wrapper'>
-        <Modal open={Boolean(fileSrc)} centered size='tiny' closeIcon>
+        <Modal
+          open={Boolean(fileSrc)}
+          centered
+          size='tiny'
+          closeIcon
+          onClose={this.handleCloseModal}
+          closeOnDimmerClick={false}
+        >
           <Header>Crop profile picture</Header>
           <Modal.Content>
             <p>
@@ -246,11 +258,11 @@ class ProfileCard extends React.Component {
                         ? whoAmI.data.fullName.toUpperCase()
                         : ''
                     }
-                    size='4em'
+                    size='5em'
                   />
                 )
               ) : (
-                <Placeholder style={{ width: '6em', height: '6em' }}>
+                <Placeholder style={{ width: '5em', height: '5em' }}>
                   <Placeholder.Image square />
                 </Placeholder>
               )}
@@ -300,7 +312,7 @@ class ProfileCard extends React.Component {
                       </Modal>
                     )}
                     <label htmlFor='profile'>
-                      <Icon name='pencil' />
+                      <Icon name='pencil' link />
                     </label>
                     <input
                       type='file'
@@ -321,7 +333,7 @@ class ProfileCard extends React.Component {
             >
               {whoAmI.loaded ? (
                 <div>
-                  <Header as='h4' styleName='blocks.display-desc-header'>
+                  <Header as='h3' styleName='blocks.display-desc-header'>
                     {whoAmI.data.fullName}
                     <Header.Subheader>
                       <p>{map(whoAmI.data.roles, 'role').join(', ')}</p>

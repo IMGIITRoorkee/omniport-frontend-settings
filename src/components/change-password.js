@@ -7,7 +7,7 @@ import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
 import { getTheme } from 'formula_one'
 import PasswordField from './change-password/password-field'
 import { initialiseChangePassword, submitChangePassword } from '../actions'
-import { appBaseURL } from '../urls'
+import { appBaseURL, urlLogin } from '../urls'
 
 class ChangePassword extends React.Component {
   state = {
@@ -40,7 +40,11 @@ class ChangePassword extends React.Component {
         new_password: '',
         confirm_password: ''
       })
-      this.props.SubmitChangePassword(data)
+      this.props.SubmitChangePassword(
+        data,
+        this.successCallback,
+        this.errCallback
+      )
     } else {
       this.setState({
         new_password: '',
@@ -53,6 +57,11 @@ class ChangePassword extends React.Component {
       })
     }
   }
+  successCallback = () => {
+    window.setTimeout(() => {
+      this.props.history.replace(urlLogin())
+    }, 5000)
+  }
   render () {
     const { changePassword } = this.props
     return (
@@ -64,7 +73,7 @@ class ChangePassword extends React.Component {
           ]}
         />
         <Segment color={getTheme()} attached='top'>
-          <Header as='h3'>Change password</Header>
+          <Header as='h4'>Change password</Header>
         </Segment>
         <Segment attached='bottom'>
           {this.state.message.active && (
@@ -157,8 +166,8 @@ const mapDispatchToProps = dispatch => {
     InitialiseChangePassword: () => {
       dispatch(initialiseChangePassword())
     },
-    SubmitChangePassword: data => {
-      dispatch(submitChangePassword(data))
+    SubmitChangePassword: (data, successCallback, errCallback) => {
+      dispatch(submitChangePassword(data, successCallback, errCallback))
     }
   }
 }

@@ -78,7 +78,7 @@ class ChangeSecrets extends React.Component {
           ]}
         />
         <Segment color={getTheme()} attached='top'>
-          <Header as='h3'>Change secret Q&A</Header>
+          <Header as='h4'>Change secret Q&A</Header>
         </Segment>
         <Segment attached='bottom'>
           <Form>

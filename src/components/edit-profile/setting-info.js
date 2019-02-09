@@ -112,7 +112,7 @@ class SettingInfo extends React.Component {
     return (
       <React.Fragment>
         <Segment attached='top'>
-          <Header as='h3'>{capitalize(settingType)} information</Header>
+          <Header as='h4'>{capitalize(settingType)} information</Header>
         </Segment>
         <Segment attached='bottom'>
           <Form>

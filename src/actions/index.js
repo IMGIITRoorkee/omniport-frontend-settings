@@ -89,7 +89,7 @@ export const initialiseChangePassword = () => {
   }
 }
 
-export const submitChangePassword = data => {
+export const submitChangePassword = (data, successCallback, errCallback) => {
   let headers = {
     'X-CSRFToken': getCookie('csrftoken')
   }
@@ -108,6 +108,7 @@ export const submitChangePassword = data => {
             ]
           }
         })
+        successCallback(res)
       })
       .catch(err => {
         dispatch({
@@ -118,6 +119,7 @@ export const submitChangePassword = data => {
             data: err.response.data.errors.oldPassword
           }
         })
+        errCallback(err)
       })
   }
 }
