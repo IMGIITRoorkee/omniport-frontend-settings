@@ -259,6 +259,7 @@ class ProfileCard extends React.Component {
                         : ''
                     }
                     size='5em'
+                    gravatarHash={whoAmI.loaded && whoAmI.data.gravatarHash}
                   />
                 )
               ) : (
@@ -280,6 +281,7 @@ class ProfileCard extends React.Component {
                           <Icon
                             name='erase'
                             bordered
+                            link
                             onClick={this.handleRemoverOpenModal}
                           />
                         }
