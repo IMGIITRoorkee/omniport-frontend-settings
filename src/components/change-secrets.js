@@ -82,8 +82,8 @@ class ChangeSecrets extends React.Component {
         </Segment>
         <Segment attached='bottom'>
           <Form>
-            <Grid>
-              <Grid.Row>
+            {(error || success) && (
+              <Grid>
                 <Grid.Column width={isBrowser ? 10 : 16}>
                   {error && (
                     <Message
@@ -110,8 +110,8 @@ class ChangeSecrets extends React.Component {
                     />
                   )}
                 </Grid.Column>
-              </Grid.Row>
-            </Grid>
+              </Grid>
+            )}
             <Grid stackable>
               <Grid.Row
                 as={Form.Field}
