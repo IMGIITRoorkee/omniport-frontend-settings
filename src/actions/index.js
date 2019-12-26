@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toast } from 'react-semantic-toasts'
 
 import { urlWhoAmI, getCookie } from 'formula_one'
 import {
@@ -20,7 +21,16 @@ export const setUser = () => {
           payload: { loaded: true, data: res.data }
         })
       })
-      .catch(err => {})
+      .catch(() => {
+        toast({
+          type: 'error',
+          title: 'Error',
+          description: 'Some error occured while setting up the user',
+          animation: 'fade up',
+          icon: 'frown up',
+          time: 3000
+        })
+      })
   }
 }
 
@@ -134,7 +144,7 @@ export const setSessionList = () => {
           payload: { loaded: true, data: res.data }
         })
       })
-      .catch(err => {
+      .catch(() => {
         dispatch({
           type: 'INITIALISE_SESSIONS',
           payload: { loaded: true, data: [] }
@@ -156,7 +166,16 @@ export const deleteSession = id => {
           payload: id
         })
       })
-      .catch(err => {})
+      .catch(() => {
+        toast({
+          type: 'error',
+          title: 'Error',
+          description: 'Session was not logged out',
+          animation: 'fade up',
+          icon: 'frown up',
+          time: 3000
+        })
+      })
   }
 }
 
