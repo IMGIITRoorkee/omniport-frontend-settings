@@ -186,6 +186,7 @@ class ProfileCard extends React.Component {
   render () {
     const { whoAmI } = this.props
     const { activeProfileDimmer, inEditMode, fileSrc, crop } = this.state
+    console.log(fileSrc)
     return (
       <div styleName='blocks.profile-card-wrapper'>
         <Modal
@@ -199,7 +200,7 @@ class ProfileCard extends React.Component {
           <Header>Crop profile picture</Header>
           <Modal.Content>
             <p>
-              you want Drag over the region of the image you want to keep. You
+              You want to drag over the region of the image you want to keep. You
               can move or resize the area. Click on <strong>Done</strong> to
               confirm.
             </p>
