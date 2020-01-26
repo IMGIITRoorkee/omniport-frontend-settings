@@ -8,7 +8,9 @@ import {
   urlChangeSecret,
   urlSessions,
   urlDeleteSession,
-  urlSettingsInformational
+  urlSettingsInformational,
+  urlSubscriptionTree,
+  paramSubscriptionNotification,
 } from '../urls'
 
 export const setUser = () => {
@@ -99,7 +101,7 @@ export const initialiseChangePassword = () => {
   }
 }
 
-export const submitChangePassword = (data, successCallback, errCallback) => {
+export const submitChangePassword = data => {
   let headers = {
     'X-CSRFToken': getCookie('csrftoken')
   }
@@ -118,7 +120,6 @@ export const submitChangePassword = (data, successCallback, errCallback) => {
             ]
           }
         })
-        successCallback(res)
       })
       .catch(err => {
         dispatch({
@@ -129,7 +130,6 @@ export const submitChangePassword = (data, successCallback, errCallback) => {
             data: err.response.data.errors.oldPassword
           }
         })
-        errCallback(err)
       })
   }
 }
@@ -240,6 +240,29 @@ export const changeData = (settingType, data, successCallback, errCallback) => {
       })
       .catch(err => {
         errCallback(err)
+      })
+  }
+}
+
+export const getNotificationCategoryList = () => {
+  return dispatch => {
+    axios
+      .get(urlSubscriptionTree(), {
+        params: {
+          action: paramSubscriptionNotification()
+        }
+      })
+      .then(res => {
+        dispatch({
+          type: 'INITIALISE_NOTIFICATION_CATEGORY_LIST',
+          payload: { loaded: true, data: res.data.results }
+        })
+      })
+      .catch(err => {
+        dispatch({
+          type: 'INITIALISE_NOTIFICATION_CATEGORY_LIST',
+          payload: { loaded: true, data: [] }
+        })
       })
   }
 }

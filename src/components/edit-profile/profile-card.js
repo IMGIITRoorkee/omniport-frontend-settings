@@ -164,7 +164,7 @@ class ProfileCard extends React.Component {
       const maintainer = data.roles.find(x => x.role === 'Maintainer')
       return (
         <React.Fragment>
-          {`${maintainer.data.designation}, ${maintainer.data.post}`}
+          {(maintainer.data) ? `${maintainer.data.designation}, ${maintainer.data.post}` : ``}
         </React.Fragment>
       )
     } else if (ifRole(data.roles, 'Faculty') !== 'NOT_ROLE') {
