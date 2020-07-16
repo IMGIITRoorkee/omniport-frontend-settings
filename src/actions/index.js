@@ -1,7 +1,7 @@
-import axios from 'axios'
-import { toast } from 'react-semantic-toasts'
+import axios from "axios";
+import { toast } from "react-semantic-toasts";
 
-import { urlWhoAmI, getCookie } from 'formula_one'
+import { urlWhoAmI, getCookie } from "formula_one";
 import {
   urlChangeProfile,
   urlChangePassword,
@@ -10,8 +10,8 @@ import {
   urlDeleteSession,
   urlSettingsInformational,
   urlSubscriptionTree,
-  paramSubscriptionNotification,
-} from '../urls'
+  urlSubmitSubscription
+} from "../urls";
 
 export const setUser = () => {
   return dispatch => {
@@ -19,22 +19,22 @@ export const setUser = () => {
       .get(urlWhoAmI())
       .then(res => {
         dispatch({
-          type: 'SET_USER',
+          type: "SET_USER",
           payload: { loaded: true, data: res.data }
-        })
+        });
       })
       .catch(() => {
         toast({
-          type: 'error',
-          title: 'Error',
-          description: 'Some error occured while setting up the user',
-          animation: 'fade up',
-          icon: 'frown up',
+          type: "error",
+          title: "Error",
+          description: "Some error occured while setting up the user",
+          animation: "fade up",
+          icon: "frown up",
           time: 3000
-        })
-      })
-  }
-}
+        });
+      });
+  };
+};
 
 export const setSecret = (successCallback, errCallback) => {
   return dispatch => {
@@ -42,97 +42,97 @@ export const setSecret = (successCallback, errCallback) => {
       .get(urlChangeSecret())
       .then(res => {
         dispatch({
-          type: 'CHANGE_SECRET',
+          type: "CHANGE_SECRET",
           payload: res.data
-        })
-        successCallback(res)
+        });
+        successCallback(res);
       })
       .catch(err => {
-        errCallback(err)
-      })
-  }
-}
+        errCallback(err);
+      });
+  };
+};
 
 export const changeSecret = (data, successCallback, errCallback) => {
   let headers = {
-    'X-CSRFToken': getCookie('csrftoken')
-  }
+    "X-CSRFToken": getCookie("csrftoken")
+  };
   return dispatch => {
     axios
       .post(urlChangeSecret(), data, { headers: headers })
       .then(res => {
         dispatch({
-          type: 'CHANGE_SECRET',
+          type: "CHANGE_SECRET",
           payload: res.data
-        })
-        successCallback(res)
+        });
+        successCallback(res);
       })
       .catch(err => {
-        errCallback(err)
-      })
-  }
-}
+        errCallback(err);
+      });
+  };
+};
 
 export const setDisplayPicture = (formData, successCallback, errCallback) => {
   let headers = {
-    'X-CSRFToken': getCookie('csrftoken')
-  }
+    "X-CSRFToken": getCookie("csrftoken")
+  };
   return dispatch => {
     axios
       .put(urlChangeProfile(), formData, { headers: headers })
       .then(res => {
         dispatch({
-          type: 'UPDATE_PROFILE_PICTURE',
+          type: "UPDATE_PROFILE_PICTURE",
           payload: res.data.displayPicture
-        })
-        successCallback(res)
+        });
+        successCallback(res);
       })
       .catch(err => {
-        errCallback(err)
-      })
-  }
-}
+        errCallback(err);
+      });
+  };
+};
 
 export const initialiseChangePassword = () => {
   return dispatch => {
     dispatch({
-      type: 'INITIALISE_CHANGE_PASSWORD'
-    })
-  }
-}
+      type: "INITIALISE_CHANGE_PASSWORD"
+    });
+  };
+};
 
 export const submitChangePassword = data => {
   let headers = {
-    'X-CSRFToken': getCookie('csrftoken')
-  }
+    "X-CSRFToken": getCookie("csrftoken")
+  };
   return dispatch => {
     axios
       .post(urlChangePassword(), data, { headers: headers })
       .then(res => {
         dispatch({
-          type: 'SET_CHANGE_PASSWORD',
+          type: "SET_CHANGE_PASSWORD",
           payload: {
             active: true,
-            type: 'success',
+            type: "success",
             data: [
-              'Password changed successfuly',
-              'You will be redirected to login page in 5 seconds'
+              "Password changed successfuly",
+              "You will be redirected to login page in 5 seconds"
             ]
           }
-        })
+        });
       })
       .catch(err => {
         dispatch({
-          type: 'SET_CHANGE_PASSWORD',
+          type: "SET_CHANGE_PASSWORD",
           payload: {
             active: true,
-            type: 'error',
+            type: "error",
             data: err.response.data.errors.oldPassword
           }
-        })
-      })
-  }
-}
+        });
+      });
+  };
+};
 
 export const setSessionList = () => {
   return dispatch => {
@@ -140,44 +140,44 @@ export const setSessionList = () => {
       .get(urlSessions())
       .then(res => {
         dispatch({
-          type: 'INITIALISE_SESSIONS',
+          type: "INITIALISE_SESSIONS",
           payload: { loaded: true, data: res.data }
-        })
+        });
       })
       .catch(() => {
         dispatch({
-          type: 'INITIALISE_SESSIONS',
+          type: "INITIALISE_SESSIONS",
           payload: { loaded: true, data: [] }
-        })
-      })
-  }
-}
+        });
+      });
+  };
+};
 
 export const deleteSession = id => {
   let headers = {
-    'X-CSRFToken': getCookie('csrftoken')
-  }
+    "X-CSRFToken": getCookie("csrftoken")
+  };
   return dispatch => {
     axios
       .delete(urlDeleteSession(id), { headers: headers })
       .then(res => {
         dispatch({
-          type: 'SIGN_OUT_SESSION',
+          type: "SIGN_OUT_SESSION",
           payload: id
-        })
+        });
       })
       .catch(() => {
         toast({
-          type: 'error',
-          title: 'Error',
-          description: 'Session was not logged out',
-          animation: 'fade up',
-          icon: 'frown up',
+          type: "error",
+          title: "Error",
+          description: "Session was not logged out",
+          animation: "fade up",
+          icon: "frown up",
           time: 3000
-        })
-      })
-  }
-}
+        });
+      });
+  };
+};
 
 export const setOptions = (settingType, successCallback, errCallback) => {
   return dispatch => {
@@ -192,14 +192,14 @@ export const setOptions = (settingType, successCallback, errCallback) => {
             dataLoaded: false,
             data: {}
           }
-        })
-        successCallback(res)
+        });
+        successCallback(res);
       })
       .catch(err => {
-        errCallback(err)
-      })
-  }
-}
+        errCallback(err);
+      });
+  };
+};
 
 export const setData = (settingType, successCallback, errCallback) => {
   return dispatch => {
@@ -212,19 +212,19 @@ export const setData = (settingType, successCallback, errCallback) => {
             dataLoaded: true,
             data: res.data
           }
-        })
-        successCallback(res)
+        });
+        successCallback(res);
       })
       .catch(err => {
-        errCallback(err)
-      })
-  }
-}
+        errCallback(err);
+      });
+  };
+};
 
 export const changeData = (settingType, data, successCallback, errCallback) => {
   let headers = {
-    'X-CSRFToken': getCookie('csrftoken')
-  }
+    "X-CSRFToken": getCookie("csrftoken")
+  };
   return dispatch => {
     axios
       .patch(urlSettingsInformational(settingType), data, { headers: headers })
@@ -235,34 +235,58 @@ export const changeData = (settingType, data, successCallback, errCallback) => {
             dataLoaded: true,
             data: res.data
           }
-        })
-        successCallback(res)
+        });
+        successCallback(res);
       })
       .catch(err => {
-        errCallback(err)
+        errCallback(err);
+      });
+  };
+};
+
+export const submitSubscription = (data, medium, successCallback, errCallback) => {
+  let headers = {
+    "X-CSRFToken": getCookie("csrftoken")
+  };
+  return dispatch => {
+    axios
+      .post(urlSubmitSubscription(medium),
+        data,
+        { headers: headers })
+      .then(res => {
+        dispatch({
+          type: "CATEGORY_SUBSCRIPTION",
+          payload: res.data
+        });
+        successCallback(res);
+      })
+      .catch(err => {
+        errCallback(err);
       })
   }
 }
 
-export const getNotificationCategoryList = () => {
+export const getSubscriptionCategoryList = (medium, successGetCallback, errGetCallback) => {
   return dispatch => {
     axios
       .get(urlSubscriptionTree(), {
         params: {
-          action: paramSubscriptionNotification()
+          action: medium
         }
       })
       .then(res => {
         dispatch({
-          type: 'INITIALISE_NOTIFICATION_CATEGORY_LIST',
+          type: 'INITIALISE_CATEGORY_LIST',
           payload: { loaded: true, data: res.data.results }
         })
+        successGetCallback(res);
       })
       .catch(err => {
         dispatch({
-          type: 'INITIALISE_NOTIFICATION_CATEGORY_LIST',
+          type: 'INITIALISE_CATEGORY_LIST',
           payload: { loaded: true, data: [] }
         })
+        errGetCallback(err);
       })
   }
 }

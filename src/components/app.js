@@ -1,28 +1,28 @@
-import React from 'react'
-import { isBrowser, isMobile } from 'react-device-detect'
-import { Scrollbars } from 'react-custom-scrollbars'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import React from "react";
+import { isBrowser, isMobile } from "react-device-detect";
+import { Scrollbars } from "react-custom-scrollbars";
+import { Route, Switch, Redirect } from "react-router-dom";
 
-import { Container, Grid } from 'semantic-ui-react'
-import { urlAppNavigation } from '../urls'
-import NavSegment from './nav-segment'
-import EditProfile from './edit-profile'
-import ChangePassword from './change-password'
-import ChangeSecrets from './change-secrets'
-import ManageSessions from './manage-sessions'
-import ManageNotifications from './manage-notifications'
-import ChangeTheme from './change-theme'
+import { Container, Grid } from "semantic-ui-react";
+import { urlAppNavigation } from "../urls";
+import NavSegment from "./nav-segment";
+import EditProfile from "./edit-profile";
+import ChangePassword from "./change-password";
+import ChangeSecrets from "./change-secrets";
+import ManageSessions from "./manage-sessions";
+import ManageCommunications from "./manage-communications";
+import ChangeTheme from "./change-theme";
 
-import main from 'formula_one/src/css/app.css'
-import block from '../css/app.css'
+import main from "formula_one/src/css/app.css";
+import block from "../css/app.css";
 
 class App extends React.Component {
-  componentDidMount () {}
-  render () {
+  componentDidMount() {}
+  render() {
     return (
       <Scrollbars autoHide>
         <Container>
-          <Grid stackable styleName='block.app-grid'>
+          <Grid stackable styleName="block.app-grid">
             {isMobile && (
               <Grid.Row centered>
                 <Grid.Column>
@@ -32,46 +32,58 @@ class App extends React.Component {
             )}
             <Grid.Row>
               <Grid.Column width={isBrowser ? 12 : 16}>
-                <div styleName='block.app-wrapper'>
+                <div styleName="block.app-wrapper">
                   <Switch>
                     <Route
                       exact
-                      path={urlAppNavigation('')}
+                      path={urlAppNavigation("")}
                       render={props => (
-                        <Redirect to={urlAppNavigation('edit_profile')} />
+                        <Redirect to={urlAppNavigation("edit_profile")} />
                       )}
                     />
                     <Route
                       exact
-                      path={urlAppNavigation('edit_profile')}
+                      path={urlAppNavigation("edit_profile")}
                       component={EditProfile}
                     />
                     <Route
                       exact
-                      path={urlAppNavigation('change_password')}
+                      path={urlAppNavigation("change_password")}
                       component={ChangePassword}
                     />
                     <Route
                       exact
-                      path={urlAppNavigation('change_secret_question_answer')}
+                      path={urlAppNavigation("change_secret_question_answer")}
                       component={ChangeSecrets}
                     />
                     <Route
                       exact
-                      path={urlAppNavigation('manage_sessions')}
+                      path={urlAppNavigation("manage_sessions")}
                       component={ManageSessions}
                     />
                     <Route
                       exact
-                      path={urlAppNavigation('change_theme')}
+                      path={urlAppNavigation("change_theme")}
                       component={ChangeTheme}
                     />
                     <Route
                       exact
-                      path={urlAppNavigation('manage_notifications')}
-                      component={ManageNotifications}
+                      path={urlAppNavigation("manage_notifications")}
+                      render={props => (
+                        <ManageCommunications
+                          {...props}
+                          medium="notifications"
+                        />
+                      )}
                     />
-                    <Route render={props => <Redirect to='/404' />} />
+                    <Route
+                      exact
+                      path={urlAppNavigation("manage_emails")}
+                      render={props => (
+                        <ManageCommunications {...props} medium="emails" />
+                      )}
+                    />
+                    <Route render={props => <Redirect to="/404" />} />
                   </Switch>
                 </div>
               </Grid.Column>
@@ -84,8 +96,8 @@ class App extends React.Component {
           </Grid>
         </Container>
       </Scrollbars>
-    )
+    );
   }
 }
 
-export default App
+export default App;

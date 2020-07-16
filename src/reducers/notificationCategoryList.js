@@ -3,13 +3,13 @@ const initialState = {
   data: []
 }
 
-const notificationCategoryList = (state = initialState, action) => {
+const subscriptionCategoryList = (state = initialState, action) => {
   switch (action.type) {
-    case 'INITIALISE_NOTIFICATION_CATEGORY_LIST':
+    case 'INITIALISE_CATEGORY_LIST':
       return action.payload
     default:
       return state
   }
 }
 
-export default notificationCategoryList
+export default subscriptionCategoryList
