@@ -10,7 +10,7 @@ import {
   urlDeleteSession,
   urlSettingsInformational,
   urlSubscriptionTree,
-  paramSubscriptionNotification,
+  urlSubmitSubscription
 } from '../urls'
 
 export const setUser = () => {
@@ -244,25 +244,49 @@ export const changeData = (settingType, data, successCallback, errCallback) => {
   }
 }
 
-export const getNotificationCategoryList = () => {
+export const submitSubscription = (data, medium, successCallback, errCallback) => {
+  let headers = {
+    'X-CSRFToken': getCookie('csrftoken')
+  };
+  return dispatch => {
+    axios
+      .post(urlSubmitSubscription(medium),
+        data,
+        { headers: headers })
+      .then(res => {
+        dispatch({
+          type: 'CATEGORY_SUBSCRIPTION',
+          payload: res.data
+        })
+        successCallback(res)
+      })
+      .catch(err => {
+        errCallback(err)
+      })
+  }
+}
+
+export const getSubscriptionCategoryList = (medium, successGetCallback, errGetCallback) => {
   return dispatch => {
     axios
       .get(urlSubscriptionTree(), {
         params: {
-          action: paramSubscriptionNotification()
+          action: medium
         }
       })
       .then(res => {
         dispatch({
-          type: 'INITIALISE_NOTIFICATION_CATEGORY_LIST',
+          type: 'INITIALISE_CATEGORY_LIST',
           payload: { loaded: true, data: res.data.results }
         })
+        successGetCallback(res)
       })
       .catch(err => {
         dispatch({
-          type: 'INITIALISE_NOTIFICATION_CATEGORY_LIST',
+          type: 'INITIALISE_CATEGORY_LIST',
           payload: { loaded: true, data: [] }
         })
+        errGetCallback(err)
       })
   }
 }

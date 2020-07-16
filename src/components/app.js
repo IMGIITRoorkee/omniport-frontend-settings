@@ -10,7 +10,7 @@ import EditProfile from './edit-profile'
 import ChangePassword from './change-password'
 import ChangeSecrets from './change-secrets'
 import ManageSessions from './manage-sessions'
-import ManageNotifications from './manage-notifications'
+import ManageCommunications from './manage-communications'
 import ChangeTheme from './change-theme'
 
 import main from 'formula_one/src/css/app.css'
@@ -69,7 +69,19 @@ class App extends React.Component {
                     <Route
                       exact
                       path={urlAppNavigation('manage_notifications')}
-                      component={ManageNotifications}
+                      render={props => (
+                        <ManageCommunications
+                          {...props}
+                          medium='notifications'
+                        />
+                      )}
+                    />
+                    <Route
+                      exact
+                      path={urlAppNavigation('manage_emails')}
+                      render={props => (
+                        <ManageCommunications {...props} medium='emails' />
+                      )}
                     />
                     <Route render={props => <Redirect to='/404' />} />
                   </Switch>

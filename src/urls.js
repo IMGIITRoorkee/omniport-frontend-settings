@@ -46,7 +46,6 @@ export function urlDeleteSession (id) {
 export function urlSubscriptionTree () {
   return `/api/categories/subscription_tree/`
 }
-
-export function paramSubscriptionNotification () {
-  return 'notifications'
+export function urlSubmitSubscription (medium) {
+  return `/api/${medium}/subscription/`
 }

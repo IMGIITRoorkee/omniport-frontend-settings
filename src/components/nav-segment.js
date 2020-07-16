@@ -37,6 +37,11 @@ export default class NavSegment extends Component {
         name: 'notifications',
         heading: 'Manage notifications',
         link: 'manage_notifications'
+      },
+      {
+        name: 'emails',
+        heading: 'Manage emails',
+        link: 'manage_emails'
       }
     ]
   }

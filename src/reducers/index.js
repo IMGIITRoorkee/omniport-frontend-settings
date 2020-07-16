@@ -7,7 +7,7 @@ import financialSettings from './financialSettings'
 import biologicalSettings from './biologicalSettings'
 import politicalSettings from './politicalSettings'
 import residentialSettings from './residentialSettings'
-import notificationCategoryList from './notificationCategoryList'
+import subscriptionCategoryList from './subscriptionCategoryList'
 
 const rootReducers = combineReducers({
   changePassword,
@@ -18,7 +18,7 @@ const rootReducers = combineReducers({
   politicalSettings,
   biologicalSettings,
   residentialSettings,
-  notificationCategoryList
+  subscriptionCategoryList
 })
 
 export default rootReducers
