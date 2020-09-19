@@ -25,6 +25,8 @@ class ManageCommunications extends React.PureComponent {
       error: false,
       succes: false,
     }
+    this.handleCheckboxChange = this.handleCheckboxChange.bind(this)
+    this.sublistRef = React.createRef();
   }
 
   componentDidMount() {
@@ -82,7 +84,7 @@ class ManageCommunications extends React.PureComponent {
       scope: prevScope,
       innerScope: inscope
     })
-
+    this.sublistRef.current.updateScope();
   }
   handleClick = (e, titleProps) => {
     const { index } = titleProps;
@@ -90,7 +92,9 @@ class ManageCommunications extends React.PureComponent {
     const newIndex = activeIndex === index ? -1 : index;
     this.setState({ activeIndex: newIndex });
   };
-
+  handleChildClick = e => {
+    e.stopPropagation();
+  }
   handleSubmit = () => {
     const { save, drop, scope } = this.state;
     const { medium } = this.props
@@ -98,8 +102,7 @@ class ManageCommunications extends React.PureComponent {
       if (scope[key] == true) save.push(key);
       else if (scope[key] == false) drop.push(key);
     });
-    console.log(this.state.save);
-    console.log(this.state.drop);
+
     const data = { save, drop };
     this.props.SubmitSubscription(
       data,
@@ -171,7 +174,9 @@ class ManageCommunications extends React.PureComponent {
                         id={app.slug}
                         defaultChecked={app.subscribed}
                         onChange={this.handleCheckboxChange}
+                        onClick={this.handleChildClick}
                       />
+
                       <Icon
                         name={
                           activeIndex === index ? "angle down" : "angle right"
@@ -185,7 +190,12 @@ class ManageCommunications extends React.PureComponent {
                       attached="bottom"
                     >
                       {app.subcategories && this.state.innerScope && (
-                        <Sublist categories={app.subcategories} childScope={this.state.innerScope} scopeCallback={this.functionCallback} />
+                        <Sublist
+                          categories={app.subcategories}
+                          childScope={this.state.innerScope}
+                          scopeCallback={this.functionCallback}
+                          ref={this.sublistRef}
+                        />
                       )}
                     </Accordion.Content>
                   </>
