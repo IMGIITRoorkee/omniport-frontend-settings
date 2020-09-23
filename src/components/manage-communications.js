@@ -21,10 +21,12 @@ class ManageCommunications extends React.PureComponent {
       scope: {},
       innerScope: {},
       refState: {},
+      indeterminate: {},
       save: [],
       drop: [],
       error: false,
       succes: false,
+      trigger: 1
     }
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this)
   }
@@ -43,7 +45,40 @@ class ManageCommunications extends React.PureComponent {
     }
   }
   functionCallback = (inscope) => {
+    this.setState({ trigger: this.state.trigger == 1 ? 0 : 1 })
     Object.assign(this.state.scope, inscope)
+    const { scope, indeterminate } = this.state
+    this.props.subscriptionCategoryList.data
+      .filter(app => {
+        return appDetails(app.slug).present || true
+      })
+      .map(app => {
+        var indeter = false
+        var allTrue = true
+        var allFalse = false
+        if (app.subcategories) {
+          Object.keys(app.subcategories).forEach(function (key) {
+            if (inscope[app.subcategories[key].slug] == false) indeter = true
+            allFalse = allFalse || inscope[app.subcategories[key].slug]
+            allTrue = allTrue && inscope[app.subcategories[key].slug]
+          })
+          if (allTrue != undefined && !allFalse != undefined && indeter != undefined) {
+            if (allTrue) {
+              scope[app.slug] = true
+              indeterminate[app.slug] = false
+            }
+            if (!allFalse) {
+              scope[app.slug] = false
+              indeterminate[app.slug] = false
+            }
+            if (indeter && allFalse) {
+              scope[app.slug] = false
+              indeterminate[app.slug] = true
+            }
+          }
+        }
+      })
+    this.setState({ scope: scope, indeterminate: indeterminate })
   }
   successGetCallback = res => {
     const { data } = res
@@ -80,14 +115,22 @@ class ManageCommunications extends React.PureComponent {
   }
 
   handleCheckboxChange = (e, { checked }) => {
+    this.setState({ trigger: this.state.trigger == 1 ? 0 : 1 })
     const prevScope = this.state.scope
     const inscope = this.state.innerScope
+    const indeterminate = this.state.indeterminate
+    if (indeterminate[e.target.id] == true) indeterminate[e.target.id] = false
     prevScope[e.target.id] = checked
-    var regex = new RegExp(`${e.target.id}..*`)
-    Object.keys(this.state.scope).some(function (key) {
-      if (regex.test(key)) {
-        prevScope[key] = checked
-        inscope[key] = checked
+    const head = this.props.subscriptionCategoryList.data
+    Object.keys(head).forEach(function (key) {
+      if (head[key].slug == e.target.id) {
+        const subhead = head[key].subcategories
+        if (subhead) {
+          Object.keys(subhead).forEach(function (key) {
+            prevScope[subhead[key].slug] = checked
+            inscope[subhead[key].slug] = checked
+          })
+        }
       }
     })
     this.setState({
@@ -191,6 +234,8 @@ class ManageCommunications extends React.PureComponent {
                         label={app.name}
                         id={app.slug}
                         defaultChecked={app.subscribed}
+                        checked={this.state.scope[app.slug]}
+                        indeterminate={false || this.state.indeterminate[app.slug]}
                         onChange={this.handleCheckboxChange}
                         onClick={this.handleChildClick}
                       />
