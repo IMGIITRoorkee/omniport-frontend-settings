@@ -53,18 +53,24 @@ export default class Sublist extends React.PureComponent {
   updateScope = () => {
     this.setState({ trigger: this.state.trigger == 1 ? 0 : 1 })
     const childScope = this.props.childScope
-    const newScope = this.state.currentScope
+    const newScope = {}
+    const prevScope = this.state.currentScope
     const inscope = this.state.innerScope
     const head = this.props.categories
     const refState = this.state.refState
+    Object.keys(head).forEach(function (key) {
+      newScope[head[key].slug] = childScope[head[key].slug]
+    })
     Object.keys(childScope).forEach(function (key) {
-      newScope[key] = childScope[key]
-      inscope[key] = childScope[key]
       Object.keys(head).forEach(function (key2) {
         if (head[key2].slug == key) {
+          prevScope[head[key2].slug] = childScope[key]
+          newScope[head[key2].slug] = childScope[key]
+          inscope[head[key2].slug] = childScope[key]
           const subhead = head[key2].subcategories
           if (subhead) {
             Object.keys(subhead).forEach(function (key3) {
+              prevScope[subhead[key3].slug] = childScope[key]
               newScope[subhead[key3].slug] = childScope[key]
               inscope[subhead[key3].slug] = childScope[key]
             })
@@ -72,6 +78,7 @@ export default class Sublist extends React.PureComponent {
         }
       })
     })
+
 
     this.setState({
       currentScope: newScope,
@@ -83,7 +90,7 @@ export default class Sublist extends React.PureComponent {
           refState[key].current.updateScope()
       }
     })
-    this.props.scopeCallback(this.state.currentScope)
+    this.props.scopeCallback(newScope)
 
   }
 

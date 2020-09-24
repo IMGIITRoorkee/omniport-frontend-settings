@@ -140,7 +140,6 @@ class ManageCommunications extends React.PureComponent {
       scope: prevScope,
       innerScope: inscope
     })
-
     if (this.state.refState[e.target.id]) {
       if (this.state.refState[e.target.id].current) {
         this.state.refState[e.target.id].current.updateScope()
