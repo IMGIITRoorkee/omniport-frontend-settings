@@ -107,9 +107,12 @@ class ManageCommunications extends React.PureComponent {
     })
       .map((category) => {
         const tScope = this.state.scope
+        const inscope = this.state.innerScope
         tScope[category.slug] = category.subscribed ? true : false
+        inscope[category.slug] = category.subscribed ? true : false
         this.setState({
-          scope: tScope
+          scope: tScope,
+          innerScope: inscope
         })
       })
   }
