@@ -259,9 +259,25 @@ export const submitSubscription = (data, medium, successCallback, errCallback) =
           payload: res.data
         })
         successCallback(res)
+        toast({
+          type: 'success',
+          title: 'Success',
+          description: 'Successfully updated subscriptions',
+          animation: 'fade up',
+          icon: 'check',
+          time: 3000
+        })
       })
       .catch(err => {
         errCallback(err)
+        toast({
+          type: 'error',
+          title: 'Error',
+          description: 'Failed to update',
+          animation: 'fade up',
+          icon: 'frown outline',
+          time: 3000
+        })
       })
   }
 }

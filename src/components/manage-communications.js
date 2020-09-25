@@ -205,22 +205,6 @@ class ManageCommunications extends React.PureComponent {
             { name: "Manage " + startCase(toLower(header)) }
           ]}
         />
-        {error && (
-          <Message
-            negative
-            header='Error'
-            content={`Failed to update.`}
-            icon='frown outline'
-          />
-        )}
-        {success && (
-          <Message
-            positive
-            header='Success'
-            content={`Successfully updated subscriptions.`}
-            icon='check'
-          />
-        )}
         <Accordion>
           {subscriptionCategoryList.loaded ? (
             subscriptionCategoryList.data &&
