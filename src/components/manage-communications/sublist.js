@@ -1,8 +1,8 @@
-import React from "react"
-import { Checkbox, List } from "semantic-ui-react"
+import React from 'react'
+import { Checkbox, List } from 'semantic-ui-react'
 
-import "../../css/communications.css"
-import { appDetails } from "../../../../../formula_one/src/utils"
+import { appDetails } from 'formula_one'
+import '../../css/communications.css'
 
 export default class Sublist extends React.PureComponent {
   constructor(props) {
@@ -48,8 +48,9 @@ export default class Sublist extends React.PureComponent {
           currentScope: tScope,
         })
       })
-    this.props.scopeCallback(this.state.currentScope)
+    this.props.scopeCallback(this.state.currentScope, this.state.indeterminate)
   }
+
   updateScope = () => {
     this.setState({ trigger: this.state.trigger == 1 ? 0 : 1 })
     const childScope = this.props.childScope
@@ -63,7 +64,7 @@ export default class Sublist extends React.PureComponent {
     })
     Object.keys(childScope).forEach(function (key) {
       Object.keys(head).forEach(function (key2) {
-        if (head[key2].slug == key) {
+        if (head[key2].slug === key) {
           prevScope[head[key2].slug] = childScope[key]
           newScope[head[key2].slug] = childScope[key]
           inscope[head[key2].slug] = childScope[key]
@@ -78,8 +79,6 @@ export default class Sublist extends React.PureComponent {
         }
       })
     })
-
-
     this.setState({
       currentScope: newScope,
       innerScope: inscope
@@ -90,24 +89,22 @@ export default class Sublist extends React.PureComponent {
           refState[key].current.updateScope()
       }
     })
-    this.props.scopeCallback(newScope)
-
+    this.props.scopeCallback(newScope, this.state.indeterminate)
   }
 
-
-  functionCallback = (inscope) => {
+  functionCallback = (inscope, indeterchild) => {
     this.setState({ trigger: this.state.trigger == 1 ? 0 : 1 })
     const { currentScope, indeterminate, innerScope, refState, trigger } = this.state
     const { categories } = this.props
     Object.assign(this.state.currentScope, inscope)
-
     this.props.categories.map(category => {
-      var indeter = false
-      var allTrue = true
-      var allFalse = false
+      let indeter = false
+      let allTrue = true
+      let allFalse = false
       if (category.subcategories) {
         Object.keys(category.subcategories).forEach(function (key) {
-          if (currentScope[category.subcategories[key].slug] == false) indeter = true
+          if (currentScope[category.subcategories[key].slug] == true) indeter = true
+          if (indeterchild[category.subcategories[key].slug]) indeter = true
           allFalse = allFalse || currentScope[category.subcategories[key].slug]
           allTrue = allTrue && currentScope[category.subcategories[key].slug]
         })
@@ -122,7 +119,7 @@ export default class Sublist extends React.PureComponent {
             innerScope[category.slug] = false
             indeterminate[category.slug] = false
           }
-          if (indeter && allFalse) {
+          if ((indeter && allFalse && !allTrue) || (indeter && !allFalse)) {
             currentScope[category.slug] = false
             innerScope[category.slug] = false
             indeterminate[category.slug] = true
@@ -135,7 +132,7 @@ export default class Sublist extends React.PureComponent {
         innerScope: innerScope
       })
     })
-    this.props.scopeCallback(this.state.currentScope)
+    this.props.scopeCallback(this.state.currentScope, this.state.indeterminate)
   }
 
   handleCheckboxChange = (e, { checked }) => {
@@ -155,7 +152,7 @@ export default class Sublist extends React.PureComponent {
     newScope[e.target.id] = checked
     const head = this.props.categories
     Object.keys(head).forEach(function (key) {
-      if (head[key].slug == e.target.id) {
+      if (head[key].slug === e.target.id) {
         const subhead = head[key].subcategories
         if (subhead) {
           Object.keys(subhead).forEach(function (key) {
@@ -174,7 +171,7 @@ export default class Sublist extends React.PureComponent {
     if (this.state.refState[e.target.id].current) {
       this.state.refState[e.target.id].current.updateScope()
     }
-    this.props.scopeCallback(newScope)
+    this.props.scopeCallback(newScope, this.state.indeterminate)
   }
   render() {
     const { categories } = this.props
@@ -195,7 +192,6 @@ export default class Sublist extends React.PureComponent {
                     checked={this.state.currentScope[category.slug]}
                     onChange={this.handleCheckboxChange}
                   />
-
                   {category.subcategories && this.state.innerScope && (
                     <Sublist
                       categories={category.subcategories}

@@ -1,17 +1,15 @@
-import React from "react"
-import { connect } from "react-redux"
-import { startCase, toLower } from "lodash"
-import { Checkbox, Segment, Accordion, Icon, Button, Message } from "semantic-ui-react"
+import React from 'react'
+import { connect } from 'react-redux'
+import { startCase, toLower } from 'lodash'
+import { Checkbox, Segment, Accordion, Icon, Button, Message } from 'semantic-ui-react'
+import { checkPropTypes } from 'prop-types'
 
-import CustomBreadcrumb from "core/common/src/components/custom-breadcrumb"
-import { appDetails, Loading } from "formula_one"
-import { getSubscriptionCategoryList, submitSubscription } from "../actions"
-import Sublist from "./manage-communications/sublist"
+import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
+import { appDetails, Loading, getTheme } from 'formula_one'
 
-import "../css/communications.css"
-import { appBaseURL } from "../urls"
-import { getTheme } from "../../../../formula_one/src/utils"
-import { checkPropTypes } from "prop-types"
+import Sublist from './manage-communications/sublist'
+import { appBaseURL } from '../urls'
+import { getSubscriptionCategoryList, submitSubscription } from '../actions'
 
 class ManageCommunications extends React.PureComponent {
   constructor(props) {
@@ -28,7 +26,6 @@ class ManageCommunications extends React.PureComponent {
       succes: false,
       trigger: 1
     }
-    this.handleCheckboxChange = this.handleCheckboxChange.bind(this)
   }
 
   componentDidMount() {
@@ -44,41 +41,49 @@ class ManageCommunications extends React.PureComponent {
         this.errGetCallback)
     }
   }
-  functionCallback = (inscope) => {
+  functionCallback = (inscope, indeterchild) => {
     this.setState({ trigger: this.state.trigger == 1 ? 0 : 1 })
+    const { scope, indeterminate, innerScope } = this.state
     Object.assign(this.state.scope, inscope)
-    const { scope, indeterminate } = this.state
     this.props.subscriptionCategoryList.data
       .filter(app => {
         return appDetails(app.slug).present || true
       })
       .map(app => {
-        var indeter = false
-        var allTrue = true
-        var allFalse = false
+        let indeter = false
+        let allTrue = true
+        let allFalse = false
         if (app.subcategories) {
           Object.keys(app.subcategories).forEach(function (key) {
-            if (inscope[app.subcategories[key].slug] == false) indeter = true
-            allFalse = allFalse || inscope[app.subcategories[key].slug]
-            allTrue = allTrue && inscope[app.subcategories[key].slug]
+            if (scope[app.subcategories[key].slug] == true) indeter = true
+            if (indeterchild[app.subcategories[key].slug]) indeter = true
+            allFalse = allFalse || scope[app.subcategories[key].slug]
+            allTrue = allTrue && scope[app.subcategories[key].slug]
           })
-          if (allTrue != undefined && !allFalse != undefined && indeter != undefined) {
+          if ((allTrue !== undefined) && (!allFalse !== undefined) && (indeter !== undefined)) {
             if (allTrue) {
               scope[app.slug] = true
+              innerScope[app.slug] = true
               indeterminate[app.slug] = false
             }
             if (!allFalse) {
               scope[app.slug] = false
+              innerScope[app.slug] = false
               indeterminate[app.slug] = false
             }
-            if (indeter && allFalse) {
+            if ((indeter && allFalse && !allTrue) || (indeter && !allFalse)) {
               scope[app.slug] = false
+              innerScope[app.slug] = false
               indeterminate[app.slug] = true
             }
           }
         }
       })
-    this.setState({ scope: scope, indeterminate: indeterminate })
+    this.setState({
+      scope: scope,
+      indeterminate: indeterminate,
+      innerScope: innerScope
+    })
   }
   successGetCallback = res => {
     const { data } = res
@@ -138,7 +143,8 @@ class ManageCommunications extends React.PureComponent {
     })
     this.setState({
       scope: prevScope,
-      innerScope: inscope
+      innerScope: inscope,
+      indeterminate: indeterminate
     })
     if (this.state.refState[e.target.id]) {
       if (this.state.refState[e.target.id].current) {
@@ -189,14 +195,14 @@ class ManageCommunications extends React.PureComponent {
   }
 
   render() {
-    const { subscriptionCategoryList, medium } = this.props
+    const { subscriptionCategoryList, medium, header } = this.props
     const { activeIndex, error, success } = this.state
     return (
       <div>
         <CustomBreadcrumb
           list={[
             { name: "Settings", link: appBaseURL() },
-            { name: "Manage " + startCase(toLower(medium)) }
+            { name: "Manage " + startCase(toLower(header)) }
           ]}
         />
         {error && (

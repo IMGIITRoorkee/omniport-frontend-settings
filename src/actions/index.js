@@ -245,9 +245,9 @@ export const changeData = (settingType, data, successCallback, errCallback) => {
 }
 
 export const submitSubscription = (data, medium, successCallback, errCallback) => {
-  let headers = {
+  const headers = {
     'X-CSRFToken': getCookie('csrftoken')
-  };
+  }
   return dispatch => {
     axios
       .post(urlSubmitSubscription(medium),
