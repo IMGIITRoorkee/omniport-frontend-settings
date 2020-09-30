@@ -42,3 +42,10 @@ export function urlSessions () {
 export function urlDeleteSession (id) {
   return `${urlSessions()}${id}/`
 }
+
+export function urlSubscriptionTree () {
+  return `/api/categories/subscription_tree/`
+}
+export function urlSubmitSubscription (medium) {
+  return `/api/${medium}/subscription/`
+}

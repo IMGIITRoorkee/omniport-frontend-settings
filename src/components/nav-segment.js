@@ -37,11 +37,16 @@ export default class NavSegment extends Component {
         name: 'notifications',
         heading: 'Manage notifications',
         link: 'manage_notifications'
+      },
+      {
+        name: 'emails',
+        heading: 'Manage email notifications',
+        link: 'manage_emails'
       }
     ]
   }
 
-  render () {
+  render() {
     return (
       <div styleName='nav-container'>
         <Menu vertical styleName='nav-menu'>

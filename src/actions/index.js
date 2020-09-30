@@ -8,7 +8,9 @@ import {
   urlChangeSecret,
   urlSessions,
   urlDeleteSession,
-  urlSettingsInformational
+  urlSettingsInformational,
+  urlSubscriptionTree,
+  urlSubmitSubscription
 } from '../urls'
 
 export const setUser = () => {
@@ -99,7 +101,7 @@ export const initialiseChangePassword = () => {
   }
 }
 
-export const submitChangePassword = (data, successCallback, errCallback) => {
+export const submitChangePassword = data => {
   let headers = {
     'X-CSRFToken': getCookie('csrftoken')
   }
@@ -118,7 +120,6 @@ export const submitChangePassword = (data, successCallback, errCallback) => {
             ]
           }
         })
-        successCallback(res)
       })
       .catch(err => {
         dispatch({
@@ -129,7 +130,6 @@ export const submitChangePassword = (data, successCallback, errCallback) => {
             data: err.response.data.errors.oldPassword
           }
         })
-        errCallback(err)
       })
   }
 }
@@ -240,6 +240,69 @@ export const changeData = (settingType, data, successCallback, errCallback) => {
       })
       .catch(err => {
         errCallback(err)
+      })
+  }
+}
+
+export const submitSubscription = (data, medium, successCallback, errCallback) => {
+  const headers = {
+    'X-CSRFToken': getCookie('csrftoken')
+  }
+  return dispatch => {
+    axios
+      .post(urlSubmitSubscription(medium),
+        data,
+        { headers: headers })
+      .then(res => {
+        dispatch({
+          type: 'CATEGORY_SUBSCRIPTION',
+          payload: res.data
+        })
+        successCallback(res)
+        toast({
+          type: 'success',
+          title: 'Success',
+          description: 'Successfully updated subscriptions',
+          animation: 'fade up',
+          icon: 'check',
+          time: 3000
+        })
+      })
+      .catch(err => {
+        errCallback(err)
+        toast({
+          type: 'error',
+          title: 'Error',
+          description: 'Failed to update',
+          animation: 'fade up',
+          icon: 'frown outline',
+          time: 3000
+        })
+      })
+  }
+}
+
+export const getSubscriptionCategoryList = (medium, successGetCallback, errGetCallback) => {
+  return dispatch => {
+    axios
+      .get(urlSubscriptionTree(), {
+        params: {
+          action: medium
+        }
+      })
+      .then(res => {
+        dispatch({
+          type: 'INITIALISE_CATEGORY_LIST',
+          payload: { loaded: true, data: res.data.results }
+        })
+        successGetCallback(res)
+      })
+      .catch(err => {
+        dispatch({
+          type: 'INITIALISE_CATEGORY_LIST',
+          payload: { loaded: true, data: [] }
+        })
+        errGetCallback(err)
       })
   }
 }

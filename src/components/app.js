@@ -2,23 +2,21 @@ import React from 'react'
 import { isBrowser, isMobile } from 'react-device-detect'
 import { Scrollbars } from 'react-custom-scrollbars'
 import { Route, Switch, Redirect } from 'react-router-dom'
-
 import { Container, Grid } from 'semantic-ui-react'
+
 import { urlAppNavigation } from '../urls'
 import NavSegment from './nav-segment'
 import EditProfile from './edit-profile'
 import ChangePassword from './change-password'
 import ChangeSecrets from './change-secrets'
 import ManageSessions from './manage-sessions'
-import ManageNotifications from './manage-notifications'
+import ManageCommunications from './manage-communications'
 import ChangeTheme from './change-theme'
-
-import main from 'formula_one/src/css/app.css'
 import block from '../css/app.css'
 
 class App extends React.Component {
-  componentDidMount () {}
-  render () {
+  componentDidMount() { }
+  render() {
     return (
       <Scrollbars autoHide>
         <Container>
@@ -69,7 +67,24 @@ class App extends React.Component {
                     <Route
                       exact
                       path={urlAppNavigation('manage_notifications')}
-                      component={ManageNotifications}
+                      render={props => (
+                        <ManageCommunications
+                          {...props}
+                          medium='notifications'
+                          header='notifications'
+                        />
+                      )}
+                    />
+                    <Route
+                      exact
+                      path={urlAppNavigation('manage_emails')}
+                      render={props => (
+                        <ManageCommunications
+                          {...props}
+                          medium='emails'
+                          header='email notifications'
+                        />
+                      )}
                     />
                     <Route render={props => <Redirect to='/404' />} />
                   </Switch>

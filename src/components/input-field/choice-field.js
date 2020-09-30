@@ -3,7 +3,7 @@ import { Dropdown } from 'semantic-ui-react'
 
 import Field from './field'
 
-export default class BooleanField extends React.PureComponent {
+export default class ChoiceField extends React.PureComponent {
   render () {
     const { name, field, value, handleChange, options, error } = this.props
     const { required, label } = field
