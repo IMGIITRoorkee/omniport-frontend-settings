@@ -282,25 +282,39 @@ export const submitSubscription = (data, medium, successCallback, errCallback) =
   }
 }
 
-export const getSubscriptionCategoryList = (medium, successGetCallback, errGetCallback) => {
+export const getSubscriptionCategoryList = (
+  medium,
+  page,
+  successGetCallback,
+  errGetCallback
+) => {
   return dispatch => {
+    dispatch({
+      type: 'SET_CATEGORY_LIST',
+      payload: { loaded: false }
+    })
     axios
       .get(urlSubscriptionTree(), {
         params: {
-          action: medium
+          action: medium,
+          page
         }
       })
       .then(res => {
         dispatch({
-          type: 'INITIALISE_CATEGORY_LIST',
-          payload: { loaded: true, data: res.data.results }
+          type: 'SET_CATEGORY_LIST',
+          payload: {
+            loaded: true,
+            data: res.data.results,
+            count: res.data.count
+          }
         })
         successGetCallback(res)
       })
       .catch(err => {
         dispatch({
-          type: 'INITIALISE_CATEGORY_LIST',
-          payload: { loaded: true, data: [] }
+          type: 'SET_CATEGORY_LIST',
+          payload: { loaded: true, data: [], count: 0 }
         })
         errGetCallback(err)
       })

@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { startCase, toLower } from 'lodash'
-import { Checkbox, Segment, Accordion, Icon, Button, Message } from 'semantic-ui-react'
-import { checkPropTypes } from 'prop-types'
+import { Checkbox, Segment, Accordion, Icon, Button, Pagination } from 'semantic-ui-react'
 
 import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
 import { appDetails, Loading, getTheme } from 'formula_one'
@@ -24,7 +23,8 @@ class ManageCommunications extends React.PureComponent {
       drop: [],
       error: false,
       succes: false,
-      trigger: 1
+      trigger: 1,
+      activePage: 1
     }
   }
 
@@ -37,8 +37,10 @@ class ManageCommunications extends React.PureComponent {
     if (!subscriptionCategoryList.loaded) {
       GetSubscriptionCategoryList(
         medium,
+        this.state.activePage,
         this.successGetCallback,
-        this.errGetCallback)
+        this.errGetCallback
+      )
     }
   }
   functionCallback = (inscope, indeterchild) => {
@@ -177,6 +179,17 @@ class ManageCommunications extends React.PureComponent {
     )
   }
 
+  handlePageChange = (e, { activePage }) => {
+    this.setState({ activePage })
+    const { medium, GetSubscriptionCategoryList } = this.props
+    GetSubscriptionCategoryList(
+      medium,
+      activePage,
+      this.successGetCallback,
+      this.errGetCallback
+    )
+  }
+
   successCallback = res => {
     this.setState({
       success: true,
@@ -261,6 +274,17 @@ class ManageCommunications extends React.PureComponent {
               <Loading />
             )}
         </Accordion>
+        {subscriptionCategoryList.loaded && (
+          <Segment basic vertical textAlign="center">
+            <Pagination
+              boundaryRange={1}
+              siblingRange={1}
+              activePage={this.state.activePage}
+              totalPages={Math.ceil(subscriptionCategoryList.count / 10)}
+              onPageChange={this.handlePageChange}
+            />
+          </Segment>
+        )}
         <Segment vertical>
           <Button
             basic
@@ -283,8 +307,20 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    GetSubscriptionCategoryList: (medium, successGetCallback, errGetCallback) => {
-      dispatch(getSubscriptionCategoryList(medium, successGetCallback, errGetCallback))
+    GetSubscriptionCategoryList: (
+      medium,
+      page,
+      successGetCallback,
+      errGetCallback
+    ) => {
+      dispatch(
+        getSubscriptionCategoryList(
+          medium,
+          page,
+          successGetCallback,
+          errGetCallback
+        )
+      )
     },
     SubmitSubscription: (data, medium, successCallback, errCallback) => {
       dispatch(submitSubscription(data, medium, successCallback, errCallback))
