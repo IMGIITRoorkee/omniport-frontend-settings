@@ -27,7 +27,7 @@ class EditProfile extends React.Component {
           ]}
         />
         <ProfileCard />
-        {['biological', 'financial', 'political', 'residential'].map(
+        {['biological', 'contact', 'financial', 'political', 'residential'].map(
           settingType => {
             return <SettingInfo settingType={settingType} key={settingType} />
           }

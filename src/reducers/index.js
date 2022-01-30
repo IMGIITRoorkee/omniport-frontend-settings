@@ -5,6 +5,7 @@ import manageSessions from './manageSessions'
 import whoAmI from './whoAmI'
 import financialSettings from './financialSettings'
 import biologicalSettings from './biologicalSettings'
+import contactSettings from './contactSettings'
 import politicalSettings from './politicalSettings'
 import residentialSettings from './residentialSettings'
 import subscriptionCategoryList from './subscriptionCategoryList'
@@ -17,6 +18,7 @@ const rootReducers = combineReducers({
   financialSettings,
   politicalSettings,
   biologicalSettings,
+  contactSettings,
   residentialSettings,
   subscriptionCategoryList
 })
