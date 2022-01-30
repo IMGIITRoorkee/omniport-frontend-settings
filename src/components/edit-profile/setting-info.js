@@ -201,6 +201,7 @@ const mapStateToProps = state => {
     whoAmI: state.whoAmI,
     financialSettings: state.financialSettings,
     biologicalSettings: state.biologicalSettings,
+    contactSettings: state.contactSettings,
     politicalSettings: state.politicalSettings,
     residentialSettings: state.residentialSettings
   }
