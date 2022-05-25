@@ -188,7 +188,10 @@ export const setOptions = (settingType, successCallback, errCallback) => {
           type: `SET_OPTIONS_${settingType.toUpperCase()}`,
           payload: {
             optionsLoaded: true,
-            options: res.data.actions.PUT,
+            options:
+              'PUT' in res.data.actions
+                ? res.data.actions.PUT
+                : res.data.actions.POST,
             dataLoaded: false,
             data: {}
           }
